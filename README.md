@@ -300,6 +300,16 @@ trump-code/
 
 ---
 
+## Also By Washin Mura | 和心村的其他專案 | 和心村の他プロジェクト
+
+| Project | What | |
+|---------|------|---|
+| **[Washin Playbook](https://github.com/sstklen/washin-playbook)** | How a non-engineer built all of this with AI — 7 chapters, zero coding background | 📚 |
+| | 一個非工程師怎麼用 AI 做出這一切 — 7 章，零程式背景 | |
+| | 非エンジニアがAIでこれを全部作った方法 — 7章、プログラミング経験ゼロ | |
+
+---
+
 <div align="center">
 
 Built by **[Washin Mura (和心村)](https://washinmura.jp)** — Boso Peninsula, Japan.
