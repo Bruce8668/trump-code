@@ -302,11 +302,18 @@ trump-code/
 
 ## Also By Washin Mura | 和心村的其他專案 | 和心村の他プロジェクト
 
-| Project | What | |
-|---------|------|---|
-| **[Washin Playbook](https://github.com/sstklen/washin-playbook)** | How a non-engineer built all of this with AI — 7 chapters, zero coding background | 📚 |
-| | 一個非工程師怎麼用 AI 做出這一切 — 7 章，零程式背景 | |
-| | 非エンジニアがAIでこれを全部作った方法 — 7章、プログラミング経験ゼロ | |
+These are the tools we used to build Trump Code — and everything else.
+
+這些是我們打造 Trump Code 和其他所有專案的工具。
+
+Trump Codeを含む全プロジェクトを作るために使ったツールです。
+
+| Project | What it does | |
+|---------|-------------|---|
+| **[5x-cto](https://github.com/sstklen/5x-cto)** | Dev pipeline: 1 Claude MAX + 1 Codex = 5x capacity | 🚀 |
+| **[YES.md](https://github.com/sstklen/yes.md)** | AI governance: safety gates, evidence rules, anti-slack | ✅ |
+| **[AI.MD](https://github.com/sstklen/ai-md)** | Convert CLAUDE.md to AI-native format — higher compliance | 📝 |
+| **[Washin Playbook](https://github.com/sstklen/washin-playbook)** | The full story: 7 chapters, zero engineering background | 📚 |
 
 ---
 
