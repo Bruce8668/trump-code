@@ -278,6 +278,12 @@ def run_circuit_breaker() -> dict[str, Any]:
     failure_learning = learn_from_failures(predictions)
     log(f"\n  第 4 道（從錯誤學）: {failure_learning.get('philosophy', '')}")
 
+    # 自動修正：建立反向規則
+    if failure_learning.get('bad_signal_combos'):
+        n_inv = create_inverse_rules(failure_learning)
+        if n_inv:
+            log(f"  🔄 建立了 {n_inv} 條反向規則（做錯→翻轉→可能做對）")
+
     # 綜合判斷
     should_pause = consec_check.get('action') == 'PAUSE'
     should_inverse = consec_check.get('action') == 'INVERSE_SUGGESTED'
@@ -449,6 +455,69 @@ def learn_from_failures(predictions: list[dict]) -> dict[str, Any]:
             log(f"      {bc['combo']}: 錯 {bc['error_rate']:.0f}% → {bc['suggestion']}")
 
     return result
+
+
+def create_inverse_rules(failure_learning: dict) -> int:
+    """
+    把反指標翻轉成正式規則。
+    TARIFF→SHORT 70% 錯 → 翻成 TARIFF→LONG（70% 對）。
+    """
+    rules_file = DATA / "surviving_rules.json"
+    if not rules_file.exists():
+        return 0
+
+    with open(rules_file, encoding='utf-8') as f:
+        data = json.load(f)
+    rules = data.get('rules', [])
+    existing_ids = {r.get('id', '') for r in rules}
+
+    new_count = 0
+    for combo in failure_learning.get('bad_signal_combos', []):
+        error_rate = combo.get('error_rate', 50)
+        if error_rate < 60:
+            continue
+
+        combo_str = combo.get('combo', '')
+        parts = combo_str.split('→')
+        if len(parts) != 2:
+            continue
+
+        signals_part = parts[0].strip()
+        old_dir = parts[1].strip()
+        new_dir = 'LONG' if old_dir == 'SHORT' else 'SHORT'
+
+        features = []
+        for sig in signals_part.split('+'):
+            sig = sig.strip()
+            if sig and sig != 'NONE':
+                features.append(f'kw_{sig.lower()}')
+        if not features:
+            continue
+
+        rule_id = f"INVERSE_{signals_part.replace('+','_')}_{new_dir}"
+        if rule_id in existing_ids:
+            continue
+
+        rules.append({
+            'id': rule_id,
+            'features': features,
+            'direction': new_dir,
+            'hold': 1,
+            'origin': 'inverse_from_failure',
+            'original_error_rate': error_rate,
+            'weight': 1.2,
+            'born_date': TODAY,
+            'combined_score': round(error_rate, 1),
+        })
+        new_count += 1
+        log(f"   🔄 反向規則: {combo_str} 錯{error_rate:.0f}% → 翻成 {new_dir}")
+
+    if new_count:
+        data['rules'] = rules
+        with open(rules_file, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+
+    return new_count
 
 
 def is_system_paused() -> bool:

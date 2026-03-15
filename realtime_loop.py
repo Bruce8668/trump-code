@@ -173,42 +173,69 @@ def classify_post(content: str) -> list[dict]:
 
 def snapshot_sp500() -> dict[str, Any]:
     """
-    即時抓 S&P 500 價格（用 yfinance 抓 SPY ETF 的最新報價）。
-    SPY ≈ S&P 500 的 1/10。
-    盤外時段用最後收盤價 + 期貨方向。
+    即時抓美股四指標：
+      SPY  — S&P 500 ETF（盤中主力，最精準）
+      ES=F — S&P 500 期貨（幾乎 24h，盤外靠它）
+      NQ=F — NASDAQ 期貨（科技股方向）
+      VIX  — 恐慌指數（越高 = 市場越怕）
+
+    盤中用 SPY，盤外用 ES 期貨，VIX 永遠有值。
     """
     try:
         import yfinance as yf
+        result: dict[str, Any] = {'timestamp': now_str(), 'source': 'yfinance'}
 
-        # SPY = S&P 500 ETF，流動性最高
-        spy = yf.Ticker("SPY")
-        info = spy.fast_info
-
-        current = float(info.last_price) if hasattr(info, 'last_price') else None
-        prev_close = float(info.previous_close) if hasattr(info, 'previous_close') else None
-
-        if current and prev_close and prev_close > 0:
-            change_pct = (current - prev_close) / prev_close * 100
-        else:
-            change_pct = None
-
-        # 也抓 ES=F（S&P 500 期貨）看盤外方向
-        es_price = None
+        # SPY
         try:
-            es = yf.Ticker("ES=F")
-            es_info = es.fast_info
-            es_price = float(es_info.last_price) if hasattr(es_info, 'last_price') else None
+            spy = yf.Ticker("SPY")
+            info = spy.fast_info
+            spy_price = float(getattr(info, 'last_price', 0) or 0)
+            spy_prev = float(getattr(info, 'previous_close', 0) or 0)
+            if spy_price and spy_prev:
+                result['spy_price'] = round(spy_price, 2)
+                result['spy_prev_close'] = round(spy_prev, 2)
+                result['spy_change_pct'] = round((spy_price - spy_prev) / spy_prev * 100, 3)
         except Exception:
             pass
 
-        return {
-            'timestamp': now_str(),
-            'spy_price': round(current, 2) if current else None,
-            'spy_prev_close': round(prev_close, 2) if prev_close else None,
-            'spy_change_pct': round(change_pct, 3) if change_pct else None,
-            'es_futures': round(es_price, 2) if es_price else None,
-            'source': 'yfinance',
-        }
+        # ES=F（S&P 500 期貨 — 盤外主力）
+        try:
+            es = yf.Ticker("ES=F")
+            es_price = float(getattr(es.fast_info, 'last_price', 0) or 0)
+            if es_price:
+                result['es_futures'] = round(es_price, 2)
+                # 如果 SPY 沒數據（盤外），用 ES 替代
+                if 'spy_price' not in result:
+                    result['spy_price'] = round(es_price / 10, 2)  # ES ≈ SPY × 10
+                    result['source'] = 'es_futures_fallback'
+        except Exception:
+            pass
+
+        # NQ=F（NASDAQ 期貨）
+        try:
+            nq = yf.Ticker("NQ=F")
+            nq_price = float(getattr(nq.fast_info, 'last_price', 0) or 0)
+            if nq_price:
+                result['nq_futures'] = round(nq_price, 2)
+        except Exception:
+            pass
+
+        # VIX（恐慌指數 — 永遠有值）
+        try:
+            vix = yf.Ticker("^VIX")
+            vix_val = float(getattr(vix.fast_info, 'last_price', 0) or 0)
+            if vix_val:
+                result['vix'] = round(vix_val, 2)
+                result['vix_level'] = (
+                    'PANIC' if vix_val > 30 else
+                    'FEAR' if vix_val > 20 else
+                    'NORMAL' if vix_val > 15 else
+                    'CALM'
+                )
+        except Exception:
+            pass
+
+        return result
 
     except ImportError:
         return {'error': 'yfinance not installed', 'timestamp': now_str()}
@@ -644,9 +671,9 @@ def run_once() -> dict[str, Any]:
         pm_snapshot = snapshot_pm_prices()
         stock_snapshot = snapshot_sp500()
         if stock_snapshot.get('spy_price'):
-            log(f"   📈 SPY: ${stock_snapshot['spy_price']} ({stock_snapshot.get('spy_change_pct', 0):+.2f}%)")
-        if stock_snapshot.get('es_futures'):
-            log(f"   📊 ES 期貨: ${stock_snapshot['es_futures']}")
+            log(f"   📈 SPY: ${stock_snapshot['spy_price']} ({stock_snapshot.get('spy_change_pct', 0):+.2f}%)"
+                f" | ES: ${stock_snapshot.get('es_futures', '?')}"
+                f" | VIX: {stock_snapshot.get('vix', '?')} ({stock_snapshot.get('vix_level', '?')})")
 
         # 3. 對每篇新推文做即時預測
         predictions: list[dict] = []
