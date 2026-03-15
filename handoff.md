@@ -1,128 +1,127 @@
 # 交接文件
-> 日期：2026-03-15 | 摘要：川普密碼從「開源分析工具」升級成「AI 閉環預測系統 + 預測市場套利 + 群眾智慧平台」
+> 日期：2026-03-15 | 摘要：川普密碼從開源分析工具升級成完整的 AI 閉環預測系統
 
 ## 身份
-你是 tkman 的 AI CTO。這個 session 對 trump-code 做了全面升級：審查 → 修復 → 預測市場 → 閉環學習 → AI Agent → 聊天機器人 → 即時引擎。
+你是 tkman 的 AI CTO。這個 session 做了 30+ commits，把 trump-code 從靜態分析升級成即時預測+自動學習+預測市場套利的完整系統。
 
-## 已完成（25+ commits，20 個新檔案）
+## 系統一句話
+兩個引擎並行：`realtime_loop.py`（每 5 分鐘即時偵測+雙軌追蹤 PM+美股）+ `daily_pipeline.py`（每天學習+進化+報告）。Opus 當大腦，Gemini Flash 當嘴巴。斷路器防全錯。
 
-### 審查與修復
-- [x] 4 AI 交叉審查（Gemini+Grok+Claude+4 背景 Agent）→ 找到 48 個問題
-- [x] FIXSPEC.md — 48 項改進規格書（Phase 0~6），另一邊已執行到 Phase 4
-- [x] JWT Token 洩漏清除、本機路徑洩漏修復、LICENSE 加上
-- [x] C1 模型情緒過濾修復（attack > positive 時不觸發做多）
-- [x] 信號信心度調整（DEAL↓0.55、RELIEF↑0.80、THREAT↑0.60）
+## 已完成（30+ commits）
 
-### 預測市場對接
-- [x] polymarket_client.py — Polymarket API（Gamma + CLOB，即時價格、訂單簿）
-- [x] kalshi_client.py — Kalshi API（公開端點，跨平台價差偵測）
-- [x] signal_market_mapper.py — 5 種信號→市場映射
-- [x] arbitrage_engine.py — 信號強度 × 低估程度 → 套利分數
+### 審查 + 修復
+- [x] 4 AI 交叉審查 48 個問題 → FIXSPEC.md
+- [x] C1 模型加情緒過濾（attack > positive 不觸發）
+- [x] 信號信心度調整（DEAL↓0.55 RELIEF↑0.85 THREAT↑0.60）
+- [x] Gemini key 從代碼移到環境變數
+- [x] 被另一邊 force-push 刪掉的 3 檔案已恢復
+
+### 預測市場
+- [x] polymarket_client.py — 修好搜尋（slug_contains 多關鍵字）
+- [x] kalshi_client.py — 公開 API，跨平台價差偵測
+- [x] arbitrage_engine.py + signal_market_mapper.py — 信號→套利分數
+- [x] pm_feedback_loop.py — 追蹤 PM 結果→自動調信號信心度
 
 ### 閉環學習
-- [x] learning_engine.py — 自動升級/降級/淘汰模型（D3↑連對9、C3🗑️37.5%）
-- [x] rule_evolver.py — 規則進化：交配/突變/精煉（+46 條新規則，500→546）
-- [x] pm_feedback_loop.py — 預測市場結果追蹤→自動調信號信心度
+- [x] learning_engine.py — 升級/降級/淘汰（D3⬆️ C3🗑️）
+- [x] rule_evolver.py — 交配/突變/精煉（每次跑 +50 條新規則）
+- [x] circuit_breaker.py — 4 道防線 + 從錯誤中學（排除法）
+
+### 即時引擎（最重要）
+- [x] realtime_loop.py — 每 5 分鐘偵測→分類→雙軌追蹤（PM+SPY）
+- [x] 事件分級（EVENT ×10 / NOTABLE ×3 / NOISE ×0）
+- [x] event_detector.py — 多日醞釀模式（關稅轟炸、RELIEF 轉折、爆量沉默）
+- [x] dual_platform_signal.py — TS vs X（中國 ×1.5、6h 窗口、X 降權 ×0.8）
 
 ### AI Agent
-- [x] ai_signal_agent.py — 本機 Opus 當大腦，產簡報包→分析→寫回
-- [x] Opus 第一次分析完成（C1 根因、模式變化偵測、3 條新規則假設）
-
-### 即時引擎（核心！）
-- [x] realtime_loop.py — 每 5 分鐘偵測新推文→分類→雙軌追蹤（PM+美股）
-- [x] 重大波動過濾（PM ±3¢、SPY ±0.5%，小的不學）
-- [x] PM 和美股的 divergence 偵測（反應不同 = 套利信號）
+- [x] ai_signal_agent.py — Opus 簡報包→分析→寫回
+- [x] Opus 第一次分析完成
 
 ### 對外介面
-- [x] trump_code_cli.py — CLI 8 個指令（signals/models/predict/json...）
-- [x] chatbot_server.py — Gemini Flash×3 key 聊天機器人 + 群眾智慧回收
-- [x] 每日額度（500 次/天全站、15 次/人、匿名、防濫用）
-- [x] README 更新（CLI/API/聊天機器人使用指引）
+- [x] mcp_server.py — 9 個 MCP 工具
+- [x] trump_code_cli.py — CLI 8 指令
+- [x] chatbot_server.py — Gemini Flash×3 key + 群眾智慧 + 每日 500 次額度
+- [x] README 全面更新
 
-## 進行中
-- [ ] 「事件級別」定義 — tkman 說不只看漲跌幅，要看有沒有「造成一個事件」
-- [ ] Polymarket 市場搜尋優化 — tag 搜尋回 0，需改用 keyword search
-- [ ] 群眾洞見→自動回測 — 用戶邏輯存了但還沒自動驗證
-- [ ] Opus 建議的新規則→自動加入規則庫
+## 關鍵數據發現
+
+| 發現 | 怎麼用 |
+|------|--------|
+| RELIEF 信號 → +9.52% | 信心度 0.85，A3 最強模型 |
+| TARIFF→SHORT 70% 錯 | 自動降權，別再看到關稅就做空 |
+| 中國信號 0% 放 X | 加權 ×1.5（刻意隱藏=更真實）|
+| TS→X 延遲 6.2h | 窗口內做多（63% 偏漲）|
+| 大事前 3 天關稅 2.7 倍 | 事件偵測器監控醞釀 |
+| 系統正在惡化（50% vs 61%） | 斷路器持續監控 |
+
+## 全測試結果
+18/18 模組 import ✅ | CLI ✅ | MCP ✅ | Polymarket ✅ | 學習 ✅ | 即時 ✅
 
 ## 已知問題
-- 另一邊同時在改 repo，經常 git conflict（已用 rebase 處理，但要注意分工）
-- Kalshi 目前 0 個 Trump 市場（CFTC 限制），client 就位但沒數據可追蹤
-- realtime_loop.py 的 PM 追蹤回 0 個市場（Gamma API tag 搜尋問題）
-- CNN Archive 的 CSV 有髒資料（URL 出現在 created_at 欄位）
+- 另一邊同時改 repo，經常 conflict + force-push 刪檔案（已恢復 3 次）
+- Polymarket 搜尋找到的主要是 GTA VI 相關市場，真正的 tariff/trade 市場 slug 不同
+- Kalshi 目前 0 個 Trump 政治市場
+- 美股數據(yfinance)盤外時段可能回 None
+- chatbot 需要 `export GEMINI_KEYS=` 環境變數
 
-## 下一步（按優先順序）
+## tkman 的核心指導（要記住的）
+1. **預測市場 = 美股，同時都要算**，不是替代。差異就是套利
+2. **只學大事**，雞毛蒜皮不理。EVENT ×10 / NOISE ×0
+3. **看前幾天的推文**，不是只看一篇。大資金需要運作時間
+4. **全錯了也是數據**。排除法：做錯做錯做錯→對的方向就出來
+5. **Opus 用本機的**，不用 API key
+6. **別人的邏輯也要收**。聊天機器人收群眾智慧
+7. **不能秀個人資料**。匿名、key 走環境變數
 
-### 🔴 最重要：「事件」定義
-tkman 說的：不是漲跌幅，是「有沒有造成一件事」。需要定義：
-- PM 價格跳變 ≥10¢ = 事件
-- SPY 日內波動 ≥1% = 事件
-- 其他國家/機構回應 = 事件（需要新聞 API）
-```python
-# 在 realtime_loop.py 加入事件偵測
-EVENT_THRESHOLDS = {'pm_jump': 0.10, 'spy_intraday': 1.0}
-```
+## 下一步
 
-### 🔴 修 Polymarket 搜尋
-```bash
-# 測試不同搜尋方式
-cd /tmp/trump-code && python3 -c "
-from polymarket_client import search_markets
-# 嘗試用 keyword 而非 tag
-print(search_markets('tariff'))
-"
-```
+### 🔴 最重要
+1. 跟另一邊協調 — 他們不能再 force-push 刪我們的檔案
+2. 把美股即時數據接好 — 盤中用 SPY 1 分鐘數據，盤外用 ES 期貨
+3. 定義更精確的「事件」— 不只看漲跌幅，看有沒有改變市場共識方向
 
-### 🟡 部署聊天機器人到 VPS
-```bash
-# 需要 tkman 說「部署」
-python3 chatbot_server.py  # 目前只能本機跑
-# 部署後需要 Caddy 反代 + 域名
-```
+### 🟡 中優先
+4. 部署 chatbot 到 VPS（等 tkman 說「部署」）
+5. 找到 Polymarket 上真正的 Trump tariff/trade 市場 slug
+6. 群眾洞見公開頁面
+7. 把 Opus 分析的新規則假設自動加入規則庫
 
-### 🟡 跑一輪完整管線測試
-```bash
-cd /tmp/trump-code && python3 daily_pipeline.py
-# 確認 10 步都跑得過
-```
+### 🟢 低優先
+8. 更多進化策略（目前只有 2/3 條件，可以試 4 條件）
+9. 接更多數據源（Bitcoin、Gold、Oil、VIX 與信號的交叉）
+10. 反向信號模型（C3 反著做 62% 對→做成正式模型）
 
-### 🟢 群眾洞見公開頁面
-目前 `/api/insights` 有 JSON，但沒有好看的網頁讓人瀏覽
-
-## 關鍵路徑
+## 檔案地圖
 ```
 /tmp/trump-code/
-├── daily_pipeline.py        ← 每日管線（10 步）
-├── realtime_loop.py         ← 即時引擎（每 5 分鐘）
-├── learning_engine.py       ← 閉環學習
-├── rule_evolver.py          ← 規則進化
-├── ai_signal_agent.py       ← Opus 簡報包
-├── pm_feedback_loop.py      ← 預測市場回饋
-├── polymarket_client.py     ← Polymarket API
-├── kalshi_client.py         ← Kalshi API
-├── arbitrage_engine.py      ← 套利引擎
-├── signal_market_mapper.py  ← 信號→市場映射
-├── trump_code_cli.py        ← CLI 工具
-├── chatbot_server.py        ← 聊天機器人
-├── trump_monitor.py         ← 即時監控（11 模型）
-├── overnight_search.py      ← 暴力搜索
-├── analysis_01~12_*.py      ← 12 個分析模組
-├── FIXSPEC.md               ← 改進規格書
-└── data/                    ← 所有數據（39 個檔案）
-    ├── opus_briefing.txt    ← 給 Opus 的簡報
-    ├── opus_analysis.json   ← Opus 的分析結果
-    ├── signal_confidence.json
-    ├── surviving_rules.json ← 546 條存活規則
-    ├── rt_predictions.json  ← 即時預測紀錄
-    └── crowd_insights.json  ← 群眾智慧
+├── 即時引擎
+│   ├── realtime_loop.py        每 5 分鐘偵測+雙軌追蹤
+│   ├── event_detector.py       多日醞釀模式
+│   └── dual_platform_signal.py TS vs X 雙平台加權
+├── 每日管線
+│   ├── daily_pipeline.py       11 步管線
+│   └── trump_monitor.py        11 個命名模型
+├── 學習層
+│   ├── learning_engine.py      升級/降級/淘汰
+│   ├── rule_evolver.py         交配/突變/精煉
+│   ├── circuit_breaker.py      斷路器+排除學習
+│   └── pm_feedback_loop.py     PM 結果→回饋
+├── 預測市場
+│   ├── polymarket_client.py    Polymarket API
+│   ├── kalshi_client.py        Kalshi API
+│   ├── arbitrage_engine.py     套利引擎
+│   └── signal_market_mapper.py 信號→市場映射
+├── AI 層
+│   └── ai_signal_agent.py      Opus 簡報包
+├── 對外
+│   ├── mcp_server.py           9 個 MCP 工具
+│   ├── trump_code_cli.py       CLI 8 指令
+│   └── chatbot_server.py       聊天機器人
+├── 分析（12 個）
+│   └── analysis_01~12_*.py
+└── data/（48 個數據檔案）
 ```
 
 ## GitHub
 https://github.com/sstklen/trump-code (public)
-
-## 系統規模
-- 34 個 Python 檔案，13,251 行代碼
-- 546 條存活規則 + 11 個命名模型
-- 564 筆已驗證預測
-- 對接 2 個預測市場（Polymarket + Kalshi）
-- 3 把 Gemini key 輪用
+40 個 Python 檔案 | 16,903 行 | 550 條規則 | 564 筆驗證 | 61.3% 命中率
