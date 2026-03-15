@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2026-03-15",
+    "posts": 11,
+    "triggered": 0,
+    "long": 0,
+    "short": 0,
+    "signals": [
+      "DEAL",
+      "CHINA",
+      "IRAN",
+      "DEAL_ONLY"
+    ],
+    "consensus": "NEUTRAL"
+  }
+]
