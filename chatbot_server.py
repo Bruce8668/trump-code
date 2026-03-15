@@ -731,6 +731,58 @@ class ChatHandler(BaseHTTPRequestHandler):
                 'opus_priority': opus.get('priority_action', ''),
             })
 
+        elif self.path.startswith('/api/data/'):
+            # 公開端點：原始數據下載
+            filename = self.path.replace('/api/data/', '')
+            allowed = [
+                'trump_posts_all.json', 'trump_posts_lite.json',
+                'predictions_log.json', 'surviving_rules.json',
+                'daily_features.json', 'trump_playbook.json',
+                'signal_confidence.json', 'market_SP500.json',
+                'market_DOW.json', 'market_NASDAQ.json', 'market_VIX.json',
+                'opus_analysis.json', 'learning_report.json',
+                'evolution_log.json', 'circuit_breaker_state.json',
+                'daily_report.json', 'polymarket_live.json',
+                'own_archive.json', 'x_posts_full.json',
+            ]
+            if filename in allowed:
+                filepath = DATA / filename
+                if filepath.exists():
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json; charset=utf-8')
+                    self.send_header('Access-Control-Allow-Origin', '*')
+                    self.send_header('Content-Disposition', f'attachment; filename="{filename}"')
+                    self.end_headers()
+                    self.wfile.write(filepath.read_bytes())
+                else:
+                    self._json_response(404, {'error': f'{filename} not found on server'})
+            else:
+                self._json_response(403, {'error': 'file not in allowed list'})
+
+        elif self.path == '/api/data':
+            # 列出所有可下載的數據
+            allowed = [
+                'trump_posts_all.json', 'trump_posts_lite.json',
+                'predictions_log.json', 'surviving_rules.json',
+                'daily_features.json', 'trump_playbook.json',
+                'signal_confidence.json', 'market_SP500.json',
+                'own_archive.json', 'x_posts_full.json',
+                'daily_report.json', 'polymarket_live.json',
+                'opus_analysis.json', 'learning_report.json',
+            ]
+            import os
+            files = []
+            for f in allowed:
+                p = DATA / f
+                if p.exists():
+                    size = os.path.getsize(p)
+                    files.append({
+                        'name': f,
+                        'size_mb': round(size / 1024 / 1024, 2),
+                        'url': f'/api/data/{f}',
+                    })
+            self._json_response(200, {'files': files, 'total': len(files)})
+
         elif self.path == '/api/polymarket':
             # 公開端點：Polymarket 即時市場數據
             pm = _load('polymarket_live.json')
