@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trump Code | Crowd Insights</title>
+  <title>Trump Code 川普密碼 トランプコード</title>
   <style>
     /* === 全域重置與深色暖調主題 === */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -501,8 +501,8 @@
       <span class="badge">LIVE</span>
     </div>
     <div class="navbar-links">
-      <a href="#signals">Signals</a>
-      <a href="#rankings">Rankings</a>
+      <a href="#signals">Signals 信號</a>
+      <a href="#rankings">Rankings 排行</a>
       <a href="#insights">Insights</a>
       <a href="https://github.com/washinmura/trump-code" target="_blank" rel="noopener" class="github-link">
         <!-- GitHub SVG 圖示 -->
@@ -523,7 +523,7 @@
 
   <!-- 三語標題 -->
   <div class="hero">
-    <h1>Crowd Intelligence Dashboard</h1>
+    <h1>Crowd Intelligence Dashboard<br><small style="font-size:14px;opacity:0.7">群眾智慧儀表板 ・ クラウド・インテリジェンス</small></h1>
     <div class="subtitle-row">
       <span class="subtitle">群眾智慧儀表板</span>
       <span class="subtitle" style="color: var(--border);">|</span>
@@ -540,22 +540,22 @@
     <!-- 系統狀態面板 -->
     <div class="status-grid" id="status-grid">
       <div class="status-card">
-        <div class="label">System Status</div>
+        <div class="label">System 系統狀態 システム</div>
         <div class="value" id="sys-status">--</div>
         <div class="sub" id="sys-uptime"></div>
       </div>
       <div class="status-card">
-        <div class="label">Signals Today</div>
+        <div class="label">Latest Posts 最新推文 最新投稿</div>
         <div class="value" id="sys-signals">--</div>
         <div class="sub" id="sys-signals-sub"></div>
       </div>
       <div class="status-card">
-        <div class="label">Models Active</div>
+        <div class="label">Models 模型 モデル</div>
         <div class="value" id="sys-models">--</div>
         <div class="sub" id="sys-models-sub"></div>
       </div>
       <div class="status-card">
-        <div class="label">Last Update</div>
+        <div class="label">Direction 方向 コンセンサス</div>
         <div class="value" id="sys-updated">--</div>
         <div class="sub" id="sys-updated-sub"></div>
       </div>
@@ -564,7 +564,7 @@
     <!-- 今日信號 -->
     <div class="section" id="signals">
       <div class="section-header">
-        <h2>Today's Signals / 今日信號 / 本日シグナル</h2>
+        <h2>Latest Signals / 最新信號 / 最新シグナル</h2>
         <span class="tag" id="signal-count">Loading...</span>
       </div>
       <div class="section-body">
@@ -578,8 +578,8 @@
     <!-- 模型排行 -->
     <div class="section" id="rankings">
       <div class="section-header">
-        <h2>Model Rankings / 模型排行 / モデルランキング</h2>
-        <span class="tag">Accuracy</span>
+        <h2>Model Rankings / 模型排行榜 / モデルランキング</h2>
+        <span class="tag">Accuracy 命中率</span>
       </div>
       <div class="section-body">
         <div id="ranking-table" class="loading">
@@ -592,7 +592,7 @@
     <!-- 群眾洞見 -->
     <div class="section" id="insights">
       <div class="section-header">
-        <h2>Crowd Insights / 群眾洞見 / クラウドインサイト</h2>
+        <h2>Crowd Insights / 群眾洞見 / クラウド・インサイト</h2>
         <span class="tag" id="insight-count">Loading...</span>
       </div>
       <div class="section-body">
@@ -608,7 +608,7 @@
   <!-- 頁尾 -->
   <div class="footer">
     <p>
-      TRUMP CODE &mdash; AI-Powered Political Signal Intelligence<br>
+      TRUMP CODE 川普密碼 トランプコード &mdash; AI Signal Intelligence / AI 信號情報 / AI シグナル・インテリジェンス<br>
       <a href="https://github.com/washinmura/trump-code" target="_blank" rel="noopener">Open Source on GitHub</a>
       &nbsp;&middot;&nbsp; Data refreshes every 30 seconds
     </p>
@@ -775,7 +775,7 @@
         container.innerHTML = `
           <div class="error-state">
             <div class="icon">\u{1F4ED}</div>
-            <p>No signals detected today</p>
+            <p>No signals detected / 暫無信號 / シグナルなし</p>
           </div>`;
         return;
       }
@@ -815,7 +815,7 @@
         container.innerHTML = `
           <div class="error-state">
             <div class="icon">\u{1F3C6}</div>
-            <p>No ranking data available</p>
+            <p>No ranking data / 暫無排行 / ランキングなし</p>
           </div>`;
         return;
       }
@@ -824,10 +824,10 @@
         <table class="ranking-table">
           <thead>
             <tr>
-              <th>Rank</th>
-              <th>Model</th>
-              <th>Accuracy</th>
-              <th>Predictions</th>
+              <th># 排名</th>
+              <th>Model 模型</th>
+              <th>Accuracy 命中率</th>
+              <th>Trades 交易數</th>
             </tr>
           </thead>
           <tbody>
@@ -860,7 +860,7 @@
         container.innerHTML = `
           <div class="error-state">
             <div class="icon">\u{1F52E}</div>
-            <p>No crowd insights yet</p>
+            <p>No insights yet / 還沒有群眾洞見 / まだインサイトがありません<br><small>跟聊天機器人分享你的想法，就會出現在這裡！💡</small></p>
           </div>`;
         return;
       }
