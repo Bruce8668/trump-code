@@ -16,6 +16,8 @@
 
 *市場が動く前に、大統領の投稿を解読できますか？*
 
+[![☕ Buy Me a Claude Max](https://img.shields.io/badge/Buy_Me_a_Claude_Max-☕_Support-FF6F00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://buy.stripe.com/5kQ6oI8Wk2Ui6Q3aww4c80r)
+
 [English](../README.md) · [中文版](README.zh.md)
 
 </div>

@@ -16,6 +16,8 @@
 
 *你能在市場動之前，先解讀出總統的下一步嗎？*
 
+[![☕ Buy Me a Claude Max](https://img.shields.io/badge/Buy_Me_a_Claude_Max-☕_Support-FF6F00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://buy.stripe.com/5kQ6oI8Wk2Ui6Q3aww4c80r)
+
 [English](../README.md) · [日本語](README.ja.md)
 
 </div>
