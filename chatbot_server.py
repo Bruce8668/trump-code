@@ -587,6 +587,41 @@ class ChatHandler(BaseHTTPRequestHandler):
             ]
             self._json_response(200, {'insights': public, 'total': len(public)})
 
+        elif self.path == '/api/playbook':
+            # 公開端點：三套劇本（避險/佈局/拉盤）
+            pb_file = DATA / "trump_playbook.json"
+            if pb_file.exists():
+                with open(pb_file, encoding='utf-8') as f:
+                    self._json_response(200, json.load(f))
+            else:
+                self._json_response(404, {'error': 'playbook not found'})
+
+        elif self.path == '/api/models':
+            # 公開端點：模型排行
+            briefing = _load('opus_briefing.json') or {}
+            self._json_response(200, {
+                'models': briefing.get('model_performance', {}),
+                'date': briefing.get('date', '?'),
+            })
+
+        elif self.path == '/api/signals':
+            # 公開端點：今日信號
+            report = _load('daily_report.json') or {}
+            self._json_response(200, {
+                'date': report.get('date', '?'),
+                'signals': report.get('signals_detected', []),
+                'posts': report.get('posts_today', 0),
+                'consensus': report.get('direction_summary', {}).get('consensus', '?'),
+            })
+
+        elif self.path == '/api/health':
+            # 公開端點：系統健康
+            breaker = _load('circuit_breaker_state.json') or {}
+            self._json_response(200, {
+                'status': breaker.get('system_status', 'UNKNOWN'),
+                'action': breaker.get('action', ''),
+            })
+
         elif self.path == '/api/status':
             # 公開端點：系統狀態摘要
             report = {}

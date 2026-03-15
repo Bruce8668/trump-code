@@ -704,6 +704,42 @@ def run_once() -> dict[str, Any]:
     else:
         log("   沒有新推文")
 
+    # 3.5 劇本偵測（避險/佈局/拉盤）
+    if new_posts:
+        try:
+            from pathlib import Path as _P
+            pb_file = _P(__file__).parent / "data" / "trump_playbook.json"
+            if pb_file.exists():
+                import json as _json
+                with open(pb_file, encoding='utf-8') as _f:
+                    playbook = _json.load(_f)
+
+                # 從今天所有推文的信號判斷屬於哪個劇本
+                day_signals = set()
+                for post in new_posts:
+                    for sig in classify_post(post['content']):
+                        sig_type = sig['type']
+                        if sig_type == 'TARIFF': day_signals.add('T')
+                        elif sig_type == 'DEAL': day_signals.add('D')
+                        elif sig_type in ('BULLISH',): day_signals.add('M')
+                        elif sig_type == 'RELIEF': day_signals.add('R')
+                        elif sig_type in ('BEARISH', 'THREAT'): day_signals.add('A')
+
+                combo = '+'.join(sorted(day_signals))
+
+                # 匹配劇本
+                for section_key in ['hedge_signals', 'position_signals', 'pump_signals']:
+                    section = playbook.get(section_key, {})
+                    for rule in section.get('rules', []):
+                        if rule['pattern'] == combo or (combo == '' and rule['pattern'] == 'NONE'):
+                            icon = {'hedge_signals': '🛡️避險', 'position_signals': '📊佈局', 'pump_signals': '🚀拉盤'}.get(section_key, '?')
+                            log(f"   {icon} 劇本觸發: {rule['label']}")
+                            log(f"      歷史: {rule.get('avg_return', 0):+.3f}% | 建議: {rule.get('action', '?')}")
+                            result['playbook'] = {'type': section_key, 'rule': rule}
+                            break
+        except Exception:
+            pass
+
     # 4. 事件醞釀偵測（看前幾天的模式）
     try:
         from event_detector import detect_events
