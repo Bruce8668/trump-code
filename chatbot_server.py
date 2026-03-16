@@ -1081,6 +1081,7 @@ class ChatHandler(BaseHTTPRequestHandler):
             report = _load('daily_report.json') or {}
             sc = _load('signal_confidence.json') or {}
             preds = _load('predictions_log.json') or []
+            rt_preds = _load('rt_predictions.json') or []
 
             # 只取第二任期的最近推文
             recent = [p for p in all_posts
@@ -1088,32 +1089,94 @@ class ChatHandler(BaseHTTPRequestHandler):
             recent.sort(key=lambda x: x.get('created_at', ''), reverse=True)
             recent = recent[:20]  # 最近 20 篇
 
-            # 拿最近的 predictions 做信號對照
-            recent_preds = {}
+            # 每日管線的信號（按日期）
+            daily_signals = {}
             if isinstance(preds, list):
                 for p in preds[-30:]:
                     d = p.get('date_signal', '')
-                    if d not in recent_preds:
-                        recent_preds[d] = p.get('day_summary', {})
+                    if d not in daily_signals:
+                        daily_signals[d] = p.get('day_summary', {})
 
-            # 組合回傳
+            # 即時引擎的信號（按推文內容前 50 字配對）
+            rt_by_preview = {}
+            rt_signal_types = set()
+            rt_directions = {'UP': 0, 'DOWN': 0, 'NEUTRAL': 0}
+            if isinstance(rt_preds, list):
+                for rp in rt_preds:
+                    preview = (rp.get('post_preview') or '')[:50].strip().lower()
+                    if preview:
+                        rt_by_preview[preview] = {
+                            'signal_types': rp.get('signal_types', []),
+                            'direction': rp.get('predicted_direction', '?'),
+                            'confidence': rp.get('confidence', 0),
+                            'pm_1h': rp.get('pm_verify_1h'),
+                            'pm_3h': rp.get('pm_verify_3h'),
+                            'spy_at': rp.get('spy_at_signal'),
+                            'status': rp.get('status', 'LIVE'),
+                        }
+                    # 統計即時信號
+                    for st in rp.get('signal_types', []):
+                        rt_signal_types.add(st)
+                    d = rp.get('predicted_direction', 'NEUTRAL')
+                    if d in rt_directions:
+                        rt_directions[d] += 1
+
+            # 組合回傳：每日信號 + 即時信號雙層補上
             items = []
             for p in recent:
                 date = (p.get('created_at') or '')[:10]
+                text = (p.get('content') or p.get('text', ''))[:300]
+
+                # 先用每日信號
+                signals = daily_signals.get(date, {})
+
+                # 如果每日信號是空的，用即時信號補
+                if not signals:
+                    preview_key = text[:50].strip().lower()
+                    rt_match = rt_by_preview.get(preview_key)
+                    if rt_match:
+                        signals = {
+                            'rt_signals': rt_match['signal_types'],
+                            'rt_direction': rt_match['direction'],
+                            'rt_confidence': rt_match['confidence'],
+                            'rt_pm_1h': rt_match['pm_1h'],
+                            'rt_pm_3h': rt_match['pm_3h'],
+                            'rt_status': rt_match['status'],
+                            'source': 'realtime',
+                        }
+
                 items.append({
                     'date': p.get('created_at', ''),
-                    'text': (p.get('content') or p.get('text', ''))[:300],
+                    'text': text,
                     'url': p.get('url', ''),
                     'source': p.get('source', 'truth_social'),
-                    'signals': recent_preds.get(date, {}),
+                    'signals': signals,
                 })
+
+            # 今日信號：每日管線 + 即時引擎合併
+            today_signals = report.get('signals_detected', [])
+            if rt_signal_types:
+                for st in rt_signal_types:
+                    if st not in today_signals:
+                        today_signals.append(st)
+
+            # 今日共識：有即時數據就用即時的
+            today_consensus = report.get('direction_summary', {}).get('consensus', '?')
+            if rt_directions['UP'] + rt_directions['DOWN'] > 0:
+                if rt_directions['DOWN'] > rt_directions['UP'] * 1.5:
+                    today_consensus = 'BEARISH'
+                elif rt_directions['UP'] > rt_directions['DOWN'] * 1.5:
+                    today_consensus = 'BULLISH'
+                else:
+                    today_consensus = 'NEUTRAL'
 
             self._json_response(200, {
                 'posts': items,
                 'total': len(items),
-                'today_signals': report.get('signals_detected', []),
-                'today_consensus': report.get('direction_summary', {}).get('consensus', '?'),
+                'today_signals': today_signals,
+                'today_consensus': today_consensus,
                 'signal_confidence': sc,
+                'rt_predictions_count': len(rt_preds),
             })
 
         else:
