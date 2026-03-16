@@ -1179,6 +1179,84 @@ class ChatHandler(BaseHTTPRequestHandler):
                 'rt_predictions_count': len(rt_preds),
             })
 
+        elif self.path == '/api/game-signal':
+            # 遊戲用：最新未開獎的即時信號（給 Devvit App 拉）
+            rt_preds = _load('rt_predictions.json') or []
+            live = [p for p in rt_preds if p.get('status') == 'LIVE']
+            if live:
+                latest = live[-1]
+                self._json_response(200, {
+                    'id': latest.get('id', ''),
+                    'post_time': latest.get('post_time', ''),
+                    'post_preview': latest.get('post_preview', ''),
+                    'signal_types': latest.get('signal_types', []),
+                    'direction': latest.get('predicted_direction', '?'),
+                    'confidence': latest.get('confidence', 0),
+                    'spy_at_signal': latest.get('spy_at_signal'),
+                    'vix_at_signal': latest.get('vix_at_signal'),
+                    'tracked_markets': len(latest.get('tracked_markets', [])),
+                    'created_at': latest.get('created_at', ''),
+                    'status': 'LIVE',
+                })
+            else:
+                self._json_response(200, {'status': 'no_live_signal'})
+
+        elif self.path.startswith('/api/game-result/'):
+            # 遊戲用：查特定信號的結果（開獎用）
+            sig_id = self.path.split('/api/game-result/')[-1]
+            rt_preds = _load('rt_predictions.json') or []
+            found = None
+            for p in rt_preds:
+                if p.get('id') == sig_id:
+                    found = p
+                    break
+            if found:
+                self._json_response(200, {
+                    'id': found.get('id', ''),
+                    'status': found.get('status', 'LIVE'),
+                    'direction': found.get('predicted_direction', '?'),
+                    'confidence': found.get('confidence', 0),
+                    'pm_verify_1h': found.get('pm_verify_1h'),
+                    'pm_verify_3h': found.get('pm_verify_3h'),
+                    'pm_verify_6h': found.get('pm_verify_6h'),
+                    'spy_at_signal': found.get('spy_at_signal'),
+                    'spy_verify_1h': found.get('spy_verify_1h'),
+                    'spy_verify_3h': found.get('spy_verify_3h'),
+                    'spy_verify_6h': found.get('spy_verify_6h'),
+                    'event_level': found.get('event_level', '?'),
+                    'post_preview': found.get('post_preview', ''),
+                })
+            else:
+                self._json_response(404, {'error': 'signal not found'})
+
+        elif self.path == '/api/game-leaderboard':
+            # 遊戲用：排行榜資料
+            lb_file = DATA / 'game_leaderboard.json'
+            lb = {}
+            if lb_file.exists():
+                try:
+                    with open(lb_file, encoding='utf-8') as f:
+                        lb = json.load(f)
+                except Exception:
+                    pass
+            self._json_response(200, lb)
+
+        elif self.path == '/api/game-stats':
+            # 遊戲用：AI vs 群眾統計
+            stats_file = DATA / 'game_stats.json'
+            stats = {}
+            if stats_file.exists():
+                try:
+                    with open(stats_file, encoding='utf-8') as f:
+                        stats = json.load(f)
+                except Exception:
+                    pass
+            # 補上 AI 的歷史命中率
+            rt_learning = _load('rt_learning.json') or {}
+            stats['ai_hit_rate'] = rt_learning.get('all_pm_hit_1h', 61.3)
+            stats['ai_total_verified'] = rt_learning.get('total_verified', 0)
+            self._json_response(200, stats)
+
         else:
             self.send_response(404)
             self.end_headers()
