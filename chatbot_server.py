@@ -1159,9 +1159,9 @@ class ChatHandler(BaseHTTPRequestHandler):
                     'user': user_msg[:200],
                     'reply': reply[:300],
                 })
-                # 只保留最近 200 筆
-                if len(chat_log) > 200:
-                    chat_log = chat_log[-200:]
+                # 保留最近 10,000 筆
+                if len(chat_log) > 10000:
+                    chat_log = chat_log[-10000:]
                 with open(chat_log_file, 'w', encoding='utf-8') as f:
                     json.dump(chat_log, f, ensure_ascii=False, indent=2)
             except Exception:
