@@ -40,6 +40,7 @@ ARCHIVE_URL = "https://ix.cnn.io/data/truth-social/truth_archive.csv"
 LAST_SEEN_FILE = DATA / "rt_last_seen.txt"
 RT_PREDICTIONS_FILE = DATA / "rt_predictions.json"      # 即時預測紀錄
 RT_LEARNING_FILE = DATA / "rt_learning.json"             # 即時學習結果
+POSTS_ALL_FILE = DATA / "trump_posts_all.json"           # 全量推文（前端讀取用）
 POLL_INTERVAL = 300  # 5 分鐘
 
 # === 事件門檻 — 從歷史數據計算（288 個交易日的統計）===
@@ -69,6 +70,80 @@ def log(msg: str) -> None:
     print(f"[{ts}] {msg}", flush=True)
 
 
+def _merge_into_posts_all(new_posts: list[dict]) -> int:
+    """
+    把新偵測到的推文合併進 trump_posts_all.json，讓前端即時顯示。
+    用 created_at + content 前 80 字做去重，避免重複寫入。
+    回傳實際新增的篇數。
+    """
+    if not new_posts:
+        return 0
+
+    # 讀取現有資料
+    data = {}
+    if POSTS_ALL_FILE.exists():
+        try:
+            with open(POSTS_ALL_FILE, encoding='utf-8') as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, IOError) as e:
+            log(f"   ⚠️ 讀取 trump_posts_all.json 失敗: {e}")
+            return 0
+
+    existing_posts = data.get('posts', [])
+
+    # 建立指紋索引（created_at + content 前 80 字）做去重
+    existing_fps = set()
+    for p in existing_posts:
+        fp = (p.get('created_at', '')[:19] + '|' +
+              (p.get('content', '') or '')[:80].strip().lower())
+        existing_fps.add(fp)
+
+    # 過濾出真正的新推文
+    added = 0
+    for post in new_posts:
+        fp = (post.get('created_at', '')[:19] + '|' +
+              post['content'][:80].strip().lower())
+        if fp not in existing_fps:
+            # 組合成 trump_posts_all.json 的格式
+            entry = {
+                'id': post.get('id', f"rt_{int(time.time())}_{added}"),
+                'created_at': post['created_at'],
+                'content': post['content'],
+                'url': post.get('url', ''),
+                'source': 'realtime_loop',
+                'is_retweet': False,
+            }
+            existing_posts.append(entry)
+            existing_fps.add(fp)
+            added += 1
+
+    if added == 0:
+        return 0
+
+    # 按時間排序（新的在前）
+    existing_posts.sort(key=lambda p: p.get('created_at', ''), reverse=True)
+
+    # 更新 metadata
+    latest_date = existing_posts[0].get('created_at', '')[:10] if existing_posts else ''
+    earliest_date = existing_posts[-1].get('created_at', '')[:10] if existing_posts else ''
+    data['total'] = len(existing_posts)
+    data['date_range'] = {'earliest': earliest_date, 'latest': latest_date}
+    data['posts'] = existing_posts
+    data['last_rt_update'] = now_str()
+
+    # 原子寫入（避免中斷損壞）
+    try:
+        from utils import safe_json_write
+        safe_json_write(POSTS_ALL_FILE, data)
+    except ImportError:
+        # fallback：直接寫（沒有 utils 的情況）
+        with open(POSTS_ALL_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+
+    log(f"   📥 寫入 {added} 篇新推文到 trump_posts_all.json（總計 {len(existing_posts)} 篇）")
+    return added
+
+
 def now_str() -> str:
     return datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 
@@ -77,8 +152,8 @@ def now_str() -> str:
 # ① 偵測新推文
 # =====================================================================
 
-def fetch_latest_posts(limit: int = 20) -> list[dict]:
-    """從 CNN Archive 抓最新推文。"""
+def _fetch_from_cnn(limit: int = 20) -> list[dict]:
+    """來源 1: CNN Archive — CSV 下載，最穩定。"""
     try:
         req = urllib.request.Request(ARCHIVE_URL, headers={
             "User-Agent": "TrumpCode-RT/1.0",
@@ -100,15 +175,192 @@ def fetch_latest_posts(limit: int = 20) -> list[dict]:
             except (UnicodeDecodeError, UnicodeEncodeError):
                 pass
             content = html.unescape(content)
-            posts.append({'created_at': created, 'content': content})
+            posts.append({
+                'created_at': created,
+                'content': content,
+                'url': row.get('url', ''),
+                'source': 'cnn',
+            })
 
-        # 按時間排序，取最新的
         posts.sort(key=lambda p: p['created_at'], reverse=True)
         return posts[:limit]
 
     except Exception as e:
-        log(f"⚠️ 抓推文失敗: {e}")
+        log(f"   ⚠️ CNN Archive 失敗: {e}")
         return []
+
+
+def _fetch_from_trumpstruth(limit: int = 20) -> list[dict]:
+    """來源 2: trumpstruth.org — HTML 爬取，CNN 更新慢時靠它補。"""
+    import re
+    try:
+        posts = []
+        # 只爬 2 頁（即時引擎不需要太多）
+        for page in range(1, 3):
+            url = f"https://trumpstruth.org/?page={page}"
+            req = urllib.request.Request(url, headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+                'Accept': 'text/html',
+            })
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                page_html = resp.read().decode('utf-8')
+
+            status_urls = re.findall(r'data-status-url="([^"]*)"', page_html)
+            contents = re.findall(
+                r'<div class="status__content">\s*(.*?)\s*</div>',
+                page_html, re.DOTALL
+            )
+            times = re.findall(
+                r'(\w+ \d{1,2}, \d{4},?\s*\d{1,2}:\d{2}\s*[AP]M)',
+                page_html
+            )
+
+            n = min(len(status_urls), len(contents))
+            for i in range(n):
+                url_raw = status_urls[i].strip()
+                pid_match = re.search(r'statuses/(\d+)', url_raw)
+                pid = pid_match.group(1) if pid_match else ''
+
+                content = re.sub(r'<[^>]+>', '', contents[i]).strip()
+
+                post_time = ''
+                if i < len(times):
+                    try:
+                        raw_time = re.sub(r'\s+', ' ', times[i].strip()).replace(',', '')
+                        dt = datetime.strptime(raw_time, '%B %d %Y %I:%M %p')
+                        post_time = dt.strftime('%Y-%m-%dT%H:%M:%S.000Z')
+                    except ValueError:
+                        pass
+
+                if content and len(content) > 10 and post_time >= '2025-01-20':
+                    posts.append({
+                        'created_at': post_time,
+                        'content': content,
+                        'url': url_raw,
+                        'source': 'trumpstruth',
+                    })
+
+        # 去重（用內容前 50 字）
+        seen = set()
+        unique = []
+        for p in posts:
+            fp = p['content'][:50].lower().strip()
+            if fp not in seen:
+                seen.add(fp)
+                unique.append(p)
+
+        unique.sort(key=lambda p: p['created_at'], reverse=True)
+        return unique[:limit]
+
+    except Exception as e:
+        log(f"   ⚠️ trumpstruth.org 失敗: {e}")
+        return []
+
+
+def _fetch_from_x_api(limit: int = 10) -> list[dict]:
+    """來源 3: X (Twitter) API — 川普在 X 上的獨家貼文，其他來源抓不到。"""
+    import os
+    bearer = os.environ.get('X_BEARER_TOKEN', '')
+
+    # 嘗試從 .env 讀
+    if not bearer:
+        env_file = BASE / '.env'
+        if env_file.exists():
+            with open(env_file) as f:
+                for line in f:
+                    if line.startswith('X_BEARER_TOKEN='):
+                        bearer = line.strip().split('=', 1)[1]
+
+    if not bearer:
+        return []
+
+    try:
+        url = (
+            'https://api.twitter.com/2/users/25073877/tweets'
+            '?max_results=20'
+            '&tweet.fields=created_at,text'
+            '&start_time=2025-01-20T00:00:00Z'
+        )
+        req = urllib.request.Request(url, headers={
+            'Authorization': f'Bearer {bearer}',
+        })
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.load(resp)
+
+        if 'data' not in data:
+            return []
+
+        posts = []
+        for t in data['data']:
+            text = t.get('text', '')
+            # 跳過 RT 和純連結推文
+            if text.startswith('RT @'):
+                continue
+            posts.append({
+                'created_at': t.get('created_at', ''),
+                'content': text,
+                'url': f"https://x.com/realDonaldTrump/status/{t['id']}",
+                'source': 'x_api',
+            })
+
+        posts.sort(key=lambda p: p['created_at'], reverse=True)
+        return posts[:limit]
+
+    except Exception as e:
+        log(f"   ⚠️ X API 失敗: {e}")
+        return []
+
+
+def fetch_latest_posts(limit: int = 20) -> list[dict]:
+    """
+    三源抓取：CNN + trumpstruth.org + X API 同時抓，互相補漏。
+    CNN 當主源（Truth Social 最完整），trumpstruth 補漏，X API 抓獨家。
+    """
+    # 來源 1: CNN（主源，Truth Social 推文）
+    cnn_posts = _fetch_from_cnn(limit=50)
+
+    # 來源 2: trumpstruth.org（補漏）
+    ts_posts = _fetch_from_trumpstruth(limit=30)
+
+    # 來源 3: X API（X 平台獨家貼文）
+    x_posts = _fetch_from_x_api(limit=10)
+
+    if not cnn_posts and not ts_posts and not x_posts:
+        log("⚠️ 三個來源都抓不到推文！")
+        return []
+
+    # 合併：CNN 為主，其他兩個補漏
+    # 用 content 前 50 字做指紋去重
+    merged = list(cnn_posts)
+    existing_fps = {p['content'][:50].lower().strip() for p in merged}
+
+    added_from_ts = 0
+    for p in ts_posts:
+        fp = p['content'][:50].lower().strip()
+        if fp not in existing_fps and len(fp) > 10:
+            merged.append(p)
+            existing_fps.add(fp)
+            added_from_ts += 1
+
+    added_from_x = 0
+    for p in x_posts:
+        fp = p['content'][:50].lower().strip()
+        if fp not in existing_fps and len(fp) > 10:
+            merged.append(p)
+            existing_fps.add(fp)
+            added_from_x += 1
+
+    # 報告來源狀況
+    src_parts = [f"CNN:{len(cnn_posts)}"]
+    if ts_posts:
+        src_parts.append(f"trumpstruth:{len(ts_posts)}(補漏{added_from_ts})")
+    if x_posts:
+        src_parts.append(f"X:{len(x_posts)}(獨家{added_from_x})")
+    log(f"   📡 三源抓取: {' + '.join(src_parts)} → 合計 {len(merged)} 篇")
+
+    # 排序，取最新的
+    merged.sort(key=lambda p: p['created_at'], reverse=True)
+    return merged[:limit]
 
 
 def get_new_posts(posts: list[dict]) -> list[dict]:
@@ -244,40 +496,75 @@ def snapshot_sp500() -> dict[str, Any]:
 
 
 def snapshot_pm_prices() -> dict[str, Any]:
-    """即時抓 Polymarket 的 Trump 相關市場價格。"""
+    """
+    即時抓 Polymarket 的 Trump 相關市場價格。
+    用 /public-search API（跟前端用的一樣，確認能用）。
+    """
     try:
-        from polymarket_client import fetch_trump_markets, get_market_price, PolymarketAPIError
-    except ImportError:
-        return {'error': 'polymarket_client not available'}
+        import urllib.parse
+        search_params = urllib.parse.urlencode({
+            'q': 'trump',
+            'limit_per_type': 20,
+            'events_status': 'active',
+        })
+        url = f'https://gamma-api.polymarket.com/public-search?{search_params}'
+        req = urllib.request.Request(url, headers={
+            'User-Agent': 'TrumpCode-RT/1.0',
+        })
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.load(resp)
 
-    try:
-        raw = fetch_trump_markets(limit=20)
-        market_list = raw.get('data', [])
-    except PolymarketAPIError as e:
-        return {'error': str(e)}
+        snapshot = {
+            'timestamp': now_str(),
+            'markets': [],
+        }
 
-    snapshot = {
-        'timestamp': now_str(),
-        'markets': [],
-    }
+        # public-search 回傳: {events: [{title, slug, markets: [{outcomePrices, clobTokenIds, ...}]}]}
+        events = data.get('events') or []
+        for ev in events:
+            title = ev.get('title', '?')
+            slug = ev.get('slug', '')
+            mkts = ev.get('markets', [])
 
-    for market in market_list[:15]:
-        question = market.get('question', '?')
-        tokens = market.get('tokens', [])
+            for m in mkts:
+                question = m.get('question', title)
+                outcomes_raw = m.get('outcomePrices', '[]')
+                clob_raw = m.get('clobTokenIds', '[]')
 
-        for token in tokens:
-            tid = token.get('token_id', '')
-            outcome = token.get('outcome', '')
-            price = float(token.get('price', 0.5))
+                # 這些欄位是 JSON 字串，需要 parse
+                try:
+                    prices = json.loads(outcomes_raw) if isinstance(outcomes_raw, str) else outcomes_raw
+                except (json.JSONDecodeError, ValueError):
+                    prices = []
 
-            snapshot['markets'].append({
-                'question': question[:100],
-                'token_id': tid,
-                'outcome': outcome,
-                'price': round(price, 4),
-            })
+                try:
+                    clob_ids = json.loads(clob_raw) if isinstance(clob_raw, str) else clob_raw
+                except (json.JSONDecodeError, ValueError):
+                    clob_ids = []
 
-    return snapshot
+                outcomes = m.get('outcomes', '["Yes","No"]')
+                try:
+                    outcome_names = json.loads(outcomes) if isinstance(outcomes, str) else outcomes
+                except (json.JSONDecodeError, ValueError):
+                    outcome_names = ['Yes', 'No']
+
+                for j, outcome in enumerate(outcome_names):
+                    price = float(prices[j]) if j < len(prices) else 0.5
+                    tid = clob_ids[j] if j < len(clob_ids) else ''
+                    snapshot['markets'].append({
+                        'question': question[:100],
+                        'token_id': tid[:30] if tid else '',
+                        'outcome': outcome,
+                        'price': round(price, 4),
+                        'slug': slug,
+                    })
+
+        log(f"   📊 Polymarket 快照: {len(snapshot['markets'])} 個市場 ({len(events)} 事件)")
+        return snapshot
+
+    except Exception as e:
+        log(f"   ⚠️ Polymarket 快照失敗: {e}")
+        return {'error': str(e), 'timestamp': now_str(), 'markets': []}
 
 
 # =====================================================================
@@ -355,6 +642,9 @@ def make_prediction(
         'pm_verify_1h': None,
         'pm_verify_3h': None,
         'pm_verify_6h': None,
+        'pm_verify_12h': None,   # 持續追蹤：川普效應可能延續好幾天
+        'pm_verify_24h': None,
+        'pm_verify_48h': None,
         'pm_correct_1h': None,
         'pm_correct_3h': None,
 
@@ -364,6 +654,9 @@ def make_prediction(
         'spy_change_at_signal': stock_snapshot.get('spy_change_pct') if stock_snapshot else None,
         'spy_verify_1h': None,
         'spy_verify_3h': None,
+        'spy_verify_12h': None,
+        'spy_verify_24h': None,
+        'spy_verify_48h': None,
         'spy_correct_1h': None,
         'spy_correct_3h': None,
 
@@ -521,10 +814,32 @@ def verify_predictions() -> dict[str, Any]:
         pred['pm_move'] = round(pm_move, 4)
         pred['spy_move'] = round(spy_move, 3)
 
-        # 6h 後標記
-        if hours_elapsed >= 6:
+        # 持續追蹤：6h / 12h / 24h / 48h（川普效應最長好幾天）
+        if hours_elapsed >= 6 and pred.get('pm_verify_6h') is None:
             pred['pm_verify_6h'] = round(avg_pm_change, 4)
 
+        if hours_elapsed >= 12 and pred.get('pm_verify_12h') is None:
+            pred['pm_verify_12h'] = round(avg_pm_change, 4)
+            spy_12h = pred.get('spy_verify_1h')  # 用最新的 spy 數據
+            if spy_at and stock_now.get('spy_price'):
+                spy_12h_change = (stock_now['spy_price'] - spy_at) / spy_at * 100
+                pred['spy_verify_12h'] = round(spy_12h_change, 3)
+
+        if hours_elapsed >= 24 and pred.get('pm_verify_24h') is None:
+            pred['pm_verify_24h'] = round(avg_pm_change, 4)
+            if spy_at and stock_now.get('spy_price'):
+                spy_24h_change = (stock_now['spy_price'] - spy_at) / spy_at * 100
+                pred['spy_verify_24h'] = round(spy_24h_change, 3)
+            log(f"   📊 24h追蹤: {pred['post_preview'][:40]}... PM {avg_pm_change:+.4f}")
+
+        if hours_elapsed >= 48 and pred.get('pm_verify_48h') is None:
+            pred['pm_verify_48h'] = round(avg_pm_change, 4)
+            if spy_at and stock_now.get('spy_price'):
+                spy_48h_change = (stock_now['spy_price'] - spy_at) / spy_at * 100
+                pred['spy_verify_48h'] = round(spy_48h_change, 3)
+
+        # 48h 後才結案（不是 6h 就結案）
+        if hours_elapsed >= 48:
             if event_level == 'NOISE':
                 pred['status'] = 'NOISE'
             else:
@@ -539,6 +854,9 @@ def verify_predictions() -> dict[str, Any]:
                     log(f"   🔴 大事！{pred['post_preview'][:50]}...")
                     log(f"      PM {avg_pm_change:+.2%} | SPY {spy_move:+.2f}% | "
                         f"預測 {'✅' if pred.get('pm_correct_3h') else '❌'}")
+        elif hours_elapsed >= 72:
+            # 超過 72 小時還是 LIVE 的，強制結案
+            pred['status'] = 'EXPIRED'
 
     # 存檔
     with open(RT_PREDICTIONS_FILE, 'w', encoding='utf-8') as f:
@@ -666,6 +984,13 @@ def run_once() -> dict[str, Any]:
     if new_posts:
         log(f"🆕 偵測到 {len(new_posts)} 篇新推文！")
         result['new_posts'] = len(new_posts)
+
+        # 1.5 將新推文寫入 trump_posts_all.json（讓前端即時顯示）
+        try:
+            merged = _merge_into_posts_all(new_posts)
+            result['merged_to_all'] = merged
+        except Exception as e:
+            log(f"   ⚠️ 合併到 trump_posts_all.json 失敗（不影響預測）: {e}")
 
         # 2. 同時快照 PM 價格 + 美股
         pm_snapshot = snapshot_pm_prices()
