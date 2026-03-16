@@ -549,9 +549,10 @@ def _build_game_round(signal: dict) -> dict | None:
     if not signal_id:
         return None
 
-    created_at = signal.get('created_at') or _now_iso()
-    created_ts = _iso_to_ts(created_at) or time.time()
-    expires_at = _ts_to_iso(created_ts + GAME_ROUND_HOURS * 3600)
+    # 用現在時間開始計時（不管信號多舊，新局一律從現在算 6 小時）
+    now_ts = time.time()
+    created_at = _now_iso()
+    expires_at = _ts_to_iso(now_ts + GAME_ROUND_HOURS * 3600)
 
     return {
         'signal_id': signal_id,
@@ -609,16 +610,15 @@ def _maybe_start_new_round():
         current = _resolve_if_needed(current)
         # resolve 成功或失敗都繼續往下找新局
 
-    # 已 resolve 或無局 → 找新信號開新局
+    # 已 resolve 或無局 → 找信號開新局
     latest_signal = _find_latest_signal()
-    current_signal_id = current.get('signal_id') if isinstance(current, dict) else None
-    if latest_signal and latest_signal.get('id') != current_signal_id:
+    if latest_signal:
         new_game = _build_game_round(latest_signal)
         if new_game:
             _save_game_current(new_game)
             return new_game
 
-    # 沒有新信號 → 回傳現有局（即使已過期/已 resolve，前端會顯示結果或等待狀態）
+    # 真的沒有任何信號 → 回傳現有局
     return current
 
 
