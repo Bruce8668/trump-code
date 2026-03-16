@@ -31,6 +31,89 @@ from typing import Any
 
 BASE = Path(__file__).parent
 DATA = BASE / "data"
+ANALYTICS_FILE = DATA / "analytics.json"
+
+# === 訪客追蹤系統 ===
+_analytics_cache = {
+    'total_requests': 0,
+    'total_unique_ips': 0,
+    'daily': {},       # {"2026-03-16": {"views": 10, "unique_ips": ["hash1","hash2"], "pages": {"/": 5, "/api/signals": 3}}}
+    'hourly': {},      # {"2026-03-16T14": 5}
+    'pages': {},       # {"/": 100, "/api/signals": 50}
+    'user_agents': {}, # {"Mozilla": 30, "GPTBot": 5}
+}
+
+def _load_analytics():
+    """啟動時載入分析數據"""
+    global _analytics_cache
+    if ANALYTICS_FILE.exists():
+        try:
+            with open(ANALYTICS_FILE, encoding='utf-8') as f:
+                _analytics_cache = json.load(f)
+        except Exception:
+            pass
+
+def _save_analytics():
+    """每 50 次請求存一次檔"""
+    try:
+        with open(ANALYTICS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(_analytics_cache, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+def _track_request(ip: str, path: str, user_agent: str):
+    """記錄每次請求"""
+    now = datetime.now(timezone.utc)
+    today = now.strftime('%Y-%m-%d')
+    hour_key = now.strftime('%Y-%m-%dT%H')
+    ip_hash = hashlib.sha256(ip.encode()).hexdigest()[:12]
+
+    _analytics_cache['total_requests'] = _analytics_cache.get('total_requests', 0) + 1
+
+    # 每日統計
+    if today not in _analytics_cache.get('daily', {}):
+        _analytics_cache.setdefault('daily', {})[today] = {'views': 0, 'unique_ips': [], 'pages': {}}
+    day = _analytics_cache['daily'][today]
+    day['views'] += 1
+    if ip_hash not in day.get('unique_ips', []):
+        day.setdefault('unique_ips', []).append(ip_hash)
+    day.setdefault('pages', {})[path] = day['pages'].get(path, 0) + 1
+
+    # 每小時統計
+    _analytics_cache.setdefault('hourly', {})[hour_key] = _analytics_cache.get('hourly', {}).get(hour_key, 0) + 1
+
+    # 頁面統計
+    _analytics_cache.setdefault('pages', {})[path] = _analytics_cache.get('pages', {}).get(path, 0) + 1
+
+    # User-Agent 分類
+    ua_short = 'Unknown'
+    ua_lower = (user_agent or '').lower()
+    if 'gptbot' in ua_lower: ua_short = 'GPTBot'
+    elif 'claudebot' in ua_lower: ua_short = 'ClaudeBot'
+    elif 'perplexitybot' in ua_lower: ua_short = 'PerplexityBot'
+    elif 'googlebot' in ua_lower: ua_short = 'Googlebot'
+    elif 'bingbot' in ua_lower: ua_short = 'Bingbot'
+    elif 'twitterbot' in ua_lower: ua_short = 'TwitterBot'
+    elif 'facebookexternalhit' in ua_lower: ua_short = 'FacebookBot'
+    elif 'chrome' in ua_lower: ua_short = 'Chrome'
+    elif 'safari' in ua_lower: ua_short = 'Safari'
+    elif 'firefox' in ua_lower: ua_short = 'Firefox'
+    elif 'curl' in ua_lower: ua_short = 'curl'
+    elif 'python' in ua_lower: ua_short = 'Python'
+    _analytics_cache.setdefault('user_agents', {})[ua_short] = _analytics_cache.get('user_agents', {}).get(ua_short, 0) + 1
+
+    # 算 unique IPs 總數
+    all_ips = set()
+    for d in _analytics_cache.get('daily', {}).values():
+        all_ips.update(d.get('unique_ips', []))
+    _analytics_cache['total_unique_ips'] = len(all_ips)
+
+    # 每 50 次存檔
+    if _analytics_cache['total_requests'] % 50 == 0:
+        _save_analytics()
+
+# 啟動時載入
+_load_analytics()
 
 
 def _load(filename: str) -> dict | list | None:
@@ -570,6 +653,14 @@ class ChatHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
 
     def do_GET(self):
+        # 追蹤每個 GET 請求（排除 favicon）
+        if self.path != '/favicon.ico':
+            _track_request(
+                self._get_ip(),
+                self.path.split('?')[0],
+                self.headers.get('User-Agent', '')
+            )
+
         if self.path == '/' or self.path == '/index.html' or self.path == '/insights' or self.path == '/insights.html':
             # 首頁 = 儀表板（含右下角聊天按鈕）
             insights_file = BASE / 'public' / 'insights.html'
@@ -951,6 +1042,27 @@ class ChatHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self._json_response(200, {'markets': [], 'total': 0, 'source': 'error', 'error': str(e)})
 
+        elif self.path == '/api/analytics':
+            # 公開端點：訪客統計
+            today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+            today_data = _analytics_cache.get('daily', {}).get(today, {})
+            # 最近 7 天
+            recent_days = {}
+            for d, v in sorted(_analytics_cache.get('daily', {}).items(), reverse=True)[:7]:
+                recent_days[d] = {'views': v.get('views', 0), 'unique_visitors': len(v.get('unique_ips', []))}
+            self._json_response(200, {
+                'total_requests': _analytics_cache.get('total_requests', 0),
+                'total_unique_visitors': _analytics_cache.get('total_unique_ips', 0),
+                'today': {
+                    'views': today_data.get('views', 0),
+                    'unique_visitors': len(today_data.get('unique_ips', [])),
+                    'top_pages': dict(sorted(today_data.get('pages', {}).items(), key=lambda x: -x[1])[:10]),
+                },
+                'recent_7_days': recent_days,
+                'top_pages_all_time': dict(sorted(_analytics_cache.get('pages', {}).items(), key=lambda x: -x[1])[:15]),
+                'user_agents': _analytics_cache.get('user_agents', {}),
+            })
+
         elif self.path == '/api/recent-posts':
             # 公開端點：最近推文+信號分析（第二任期 2025-01-20 起）
             posts_data = _load('trump_posts_all.json') or {}
@@ -1065,5 +1177,6 @@ if __name__ == '__main__':
     try:
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\n停止。")
+        print("\n停止。儲存分析數據...")
+        _save_analytics()
         server.server_close()
