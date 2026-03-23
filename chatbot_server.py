@@ -988,15 +988,43 @@ class ChatHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(HTML_PAGE.encode('utf-8'))
 
-        elif self.path in ('/robots.txt', '/sitemap.xml', '/llms.txt'):
-            # SEO/AEO 靜態檔案
+        elif self.path in ('/robots.txt', '/sitemap.xml', '/llms.txt', '/llms-full.txt',
+                           '/og-image.png', '/trumpcode2026washinmura.txt',
+                           '/.well-known/llms.txt'):
+            # SEO/AEO 靜態檔案（public/ 目錄下）
             fname = self.path.lstrip('/')
             fpath = BASE / 'public' / fname
             if fpath.exists():
-                ct = 'text/plain; charset=utf-8' if fname.endswith('.txt') else 'application/xml; charset=utf-8'
+                # Content-Type 對照表
+                ext_ct = {
+                    '.txt': 'text/plain; charset=utf-8',
+                    '.xml': 'application/xml; charset=utf-8',
+                    '.png': 'image/png',
+                    '.json': 'application/json; charset=utf-8',
+                    '.ico': 'image/x-icon',
+                }
+                ext = '.' + fname.rsplit('.', 1)[-1] if '.' in fname else '.txt'
+                ct = ext_ct.get(ext, 'application/octet-stream')
                 self.send_response(200)
                 self.send_header('Content-Type', ct)
                 self.send_header('Cache-Control', 'public, max-age=3600')
+                self.end_headers()
+                self.wfile.write(fpath.read_bytes())
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+        elif self.path.startswith('/articles/'):
+            # 每日文章靜態檔案（articles/ 目錄下）
+            fname = self.path.lstrip('/')
+            fpath = BASE / fname
+            if fpath.exists() and fpath.is_file():
+                ext = fpath.suffix
+                ct = {'.md': 'text/markdown; charset=utf-8',
+                      '.json': 'application/json; charset=utf-8'}.get(ext, 'text/plain; charset=utf-8')
+                self.send_response(200)
+                self.send_header('Content-Type', ct)
+                self.send_header('Cache-Control', 'public, max-age=1800')
                 self.end_headers()
                 self.wfile.write(fpath.read_bytes())
             else:
