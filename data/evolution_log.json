@@ -414,5 +414,46 @@
         "origin": "mutation_remove"
       }
     ]
+  },
+  {
+    "date": "2026-03-23",
+    "crossover": 16,
+    "mutation": 12,
+    "distill": 17,
+    "total_new": 45,
+    "total_rules_after": 600,
+    "top_3": [
+      {
+        "features": [
+          "open_tariff",
+          "volume_falling_3d"
+        ],
+        "direction": "LONG",
+        "hold": 3,
+        "score": 88.5,
+        "origin": "crossover"
+      },
+      {
+        "features": [
+          "kw_biden",
+          "kw_tariffs",
+          "open_trade"
+        ],
+        "direction": "LONG",
+        "hold": 2,
+        "score": 80.9,
+        "origin": "mutation_replace"
+      },
+      {
+        "features": [
+          "is_friday",
+          "kw_economy"
+        ],
+        "direction": "LONG",
+        "hold": 2,
+        "score": 75.0,
+        "origin": "crossover"
+      }
+    ]
   }
 ]
