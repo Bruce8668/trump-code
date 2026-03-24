@@ -1,31 +1,16 @@
-⚡ Trump Code | Flash — Indiana State Senator Endorsement
+⚡ Trump Code | Flash — Indiana State Endorsement, No Market Signal
 
 ## What He Said
+Trump endorsed Indiana State Senator Gary Byrne (47th District), praising his record on taxes, deregulation, and energy — standard GOP talking points wrapped in a local political endorsement.
 
-Trump endorsed Indiana State Senator Daryl Schmidt (48th District), praising him as a "fifth generation family farmer" fighting for agriculture, tax cuts, deregulation, American energy dominance, and election integrity.
+## Why It Matters (It Doesn't, Much)
+**Market impact: Near zero.** This is a state-level political endorsement, not a policy announcement. The keywords — "Cut Taxes," "Energy DOMINANCE," "MADE IN [America]" — are recycled rhetoric, not new directives. No tariff threats, no Fed commentary, no trade war escalation. The post appears truncated mid-sentence, suggesting a routine social media push rather than a calculated policy signal.
 
-## Why It Matters
-
-**It doesn't — for markets.** This is a standard state-level political endorsement with zero policy substance beyond boilerplate Republican talking points. No new executive action, no tariff signal, no federal legislation hint, no personnel announcement.
-
-The post appears truncated mid-sentence ("Strengthen our M—"), likely continuing with "Military" or "Military/Border." Even the full text would carry no tradeable signal.
-
-**Key context:** Trump routinely posts state legislator endorsements in batches. These serve party-building purposes and have no historical correlation with market moves.
-
-## Signal Breakdown
-
-| Factor | Assessment |
-|--------|-----------|
-| Policy signal | None |
-| Tariff/trade mention | None |
-| Fed/rates implication | None |
-| Sector impact | None |
-| Geopolitical signal | None |
-| Confidence | 0% directional |
+**Confidence: 0% directional bias** — correctly flagged NEUTRAL.
 
 ## What to Watch
+- **Nothing actionable from this post alone.** However, a cluster of energy/manufacturing endorsements could preview midterm campaign themes that later become legislative priorities.
+- **If follow-up posts drop** with specific policy language (tariff numbers, sector targets, executive order hints), reassess immediately.
+- **Indiana context:** State is heavy in manufacturing, agriculture, and logistics. If Trump starts naming Hoosier industries specifically, watch $XLI (Industrials), $XLE (Energy), and Indiana-headquartered names like Eli Lilly ($LLY), Cummins ($CMI).
 
-- **Nothing from this post.** Resume monitoring for substantive policy posts.
-- If Trump shifts from endorsement mode to policy mode today, the contrast itself may signal upcoming announcements — batch endorsements sometimes precede news cycles where he wants political cover.
-
-**Verdict: NEUTRAL — No action required.**
+**Bottom line:** File under political noise. Resume watching for real signals.

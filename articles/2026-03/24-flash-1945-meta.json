@@ -1,9 +1,9 @@
 {
   "type": "flash",
   "date": "2026-03-24",
-  "generated_at": "2026-03-24T19:45:42.709825+00:00",
-  "post_id": "116285854736419949",
-  "post_content": "State Senator Daryl Schmidt is doing a tremendous job representing the Great People of Indiana’s 48th State Senate District! A Fifth Generation Family Farmer, Daryl is a strong and effective Voice for",
+  "generated_at": "2026-03-24T19:45:53.627157+00:00",
+  "post_id": "116285849550720642",
+  "post_content": "State Senator Gary Byrne is doing a fantastic job representing the incredible people of Indiana’s 47th Congressional District! A Highly Respected Businessman, North Harrison School Board Member, and C",
   "signals": "",
   "direction": "NEUTRAL",
   "confidence": 0.0,
@@ -11,17 +11,17 @@
     "zh": {
       "status": "ok",
       "path": "/Users/tkman/Projects/trump-code/articles/2026-03/24-flash-1945-zh.md",
-      "length": 436
+      "length": 420
     },
     "en": {
       "status": "ok",
       "path": "/Users/tkman/Projects/trump-code/articles/2026-03/24-flash-1945-en.md",
-      "length": 1500
+      "length": 1449
     },
     "ja": {
       "status": "ok",
       "path": "/Users/tkman/Projects/trump-code/articles/2026-03/24-flash-1945-ja.md",
-      "length": 456
+      "length": 438
     }
   }
 }
