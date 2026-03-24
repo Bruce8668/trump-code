@@ -1,0 +1,45 @@
+{
+  "date": "2026-03-23",
+  "generated_at": "2026-03-24T04:00:24.492453+00:00",
+  "posts_count": 12,
+  "articles": {
+    "zh": {
+      "status": "error",
+      "error": "washin_llm 失敗: 所有 AI 都失敗: claude-local: claude 指令不存在（未安裝 Claude Code） | Gemini: 沒有 Key"
+    },
+    "en": {
+      "status": "error",
+      "error": "washin_llm 失敗: 所有 AI 都失敗: claude-local: claude 指令不存在（未安裝 Claude Code） | Gemini: 沒有 Key"
+    },
+    "ja": {
+      "status": "error",
+      "error": "washin_llm 失敗: 所有 AI 都失敗: claude-local: claude 指令不存在（未安裝 Claude Code） | Gemini: 沒有 Key"
+    }
+  },
+  "schema": {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": "Trump Code Daily Analysis 2026-03-23",
+    "alternativeHeadline": "川普密碼日報 2026-03-23",
+    "datePublished": "2026-03-23",
+    "dateModified": "2026-03-24",
+    "author": {
+      "@type": "Organization",
+      "name": "Washin Mura (和心村)",
+      "url": "https://washinmura.jp"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "TRUMP CODE",
+      "url": "https://trumpcode.washinmura.jp"
+    },
+    "inLanguage": [
+      "zh-TW",
+      "en",
+      "ja"
+    ],
+    "url": "https://trumpcode.washinmura.jp/daily.html?date=2026-03-23",
+    "isAccessibleForFree": true,
+    "about": "AI analysis of Trump social media posts and stock market impact"
+  }
+}
