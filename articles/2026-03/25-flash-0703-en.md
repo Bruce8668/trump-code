@@ -1,5 +1,5 @@
 ⚡ Trump Code | Flash
 
-**Trump Promotes Kennedy Center Honors Hosting Role**
+**Trump Endorses Van Epps in TN-7**
 
-Former President Trump has announced he will host "THE TRUMP KENNEDY CENTER HONORS" broadcast tonight on CBS
+Former President Trump just issued a direct endorsement for "MAGA Warrior" Matt Van Epps in Tennessee
