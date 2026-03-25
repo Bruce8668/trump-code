@@ -1265,5 +1265,12 @@
     "detect_time": "2026-03-25T13:01:52.383099+00:00",
     "latency_sec": 49332.4,
     "content_preview": "Highly Respected Prime Minister of Hungary, Viktor Orbán, is a truly strong and "
+  },
+  {
+    "post_id": "116290206738569856",
+    "pub_time": "2026-03-25T14:08:54+00:00",
+    "detect_time": "2026-03-25T14:10:41.400581+00:00",
+    "latency_sec": 107.4,
+    "content_preview": "Trump and Pirro deserve credit for big cuts to Washington, DC crime:"
   }
 ]
