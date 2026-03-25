@@ -275,13 +275,15 @@ def _trigger_flash_article(post: dict, signals: list, direction: str, confidence
             ok = sum(1 for v in meta.get('articles', {}).values() if v.get('status') == 'ok')
             log(f"     📝 即時快報完成：{ok}/3 語言成功")
 
-            # 發 X 推文
+            # 發 X 三語 Thread
             if ok > 0:
                 try:
-                    from x_poster import post_flash_summary
-                    x_result = post_flash_summary(meta)
+                    from x_poster import post_flash_thread
+                    x_result = post_flash_thread(meta)
                     if x_result.get('ok'):
-                        log(f"     🐦 X 發推成功: {x_result['url']}")
+                        tweets = x_result.get('tweets', [])
+                        langs = '/'.join(t['lang'] for t in tweets)
+                        log(f"     🐦 X Thread {len(tweets)} 則 ({langs}): {x_result.get('main_url', '')}")
                     else:
                         log(f"     ⚠️ X 發推失敗: {x_result.get('error', '')[:80]}")
                 except Exception as e:

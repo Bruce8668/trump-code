@@ -104,11 +104,12 @@ def _oauth_header(method: str, url: str, body_params: dict = None) -> str:
 
 # === 發推 ===
 
-def post_tweet(text: str) -> dict:
+def post_tweet(text: str, reply_to: str = None) -> dict:
     """發一則推文到 @trumpcodeai。
 
     Args:
         text: 推文內容（最多 280 字元）
+        reply_to: 回覆的推文 ID（用於建立 Thread）
 
     Returns:
         {"ok": True, "tweet_id": "...", "url": "..."} 或
@@ -119,7 +120,10 @@ def post_tweet(text: str) -> dict:
 
     # X API v2 發推 endpoint
     url = "https://api.x.com/2/tweets"
-    body = json.dumps({"text": text[:280]}).encode("utf-8")
+    payload = {"text": text[:280]}
+    if reply_to:
+        payload["reply"] = {"in_reply_to_tweet_id": reply_to}
+    body = json.dumps(payload).encode("utf-8")
 
     auth = _oauth_header("POST", url)
 
@@ -150,31 +154,82 @@ def post_tweet(text: str) -> dict:
 
 
 def post_flash_summary(meta: dict) -> dict:
-    """從快報 meta 自動組文案並發推。
+    """從快報 meta 自動組文案並發推（單則版，向下相容）。"""
+    return post_flash_thread(meta)
 
-    格式：
-    ⚡ Trump Code | Flash
-    {方向} {信號}
-    {推文內容前 80 字}
-    🔗 trumpcode.washinmura.jp/daily.html
+
+def post_flash_thread(meta: dict) -> dict:
+    """發三語 Thread：主推英文 → 回覆中文 → 回覆日文。
+
+    Thread 結構：
+      主推（EN）：🚨 Trump posted: {摘要} + AI Signal + 連結
+      ↳ 回覆 1（ZH）：中文快報摘要
+      ↳ 回覆 2（JA）：日文快報摘要
+
+    Returns:
+        {"ok": True, "tweets": [{"lang": "en", "tweet_id": "...", "url": "..."}, ...]}
     """
     direction = meta.get("direction", "NEUTRAL")
     signals = meta.get("signals", "")
     content = meta.get("post_content", "")[:80]
     date = meta.get("date", "")
+    confidence = meta.get("confidence", 0)
+    articles = meta.get("articles", {})
 
-    # 方向 emoji
     dir_emoji = {"UP": "📈", "DOWN": "📉", "NEUTRAL": "➡️"}.get(direction, "➡️")
 
-    text = f"⚡ Trump Code | Flash\n{dir_emoji} {direction}"
-    if signals:
-        text += f" [{signals}]"
-    text += f"\n\n{content}"
+    # --- 主推（英文）---
+    en_text = f"🚨 Trump posted: {content}"
     if len(content) >= 78:
-        text += "..."
-    text += f"\n\n🔗 trumpcode.washinmura.jp/daily.html?date={date}"
+        en_text += "..."
+    en_text += f"\n\n{dir_emoji} {direction}"
+    if signals:
+        en_text += f" | {signals}"
+    if confidence and confidence > 0:
+        en_text += f" ({int(confidence * 100)}%)"
+    en_text += f"\n\nFull analysis ↓\ntrumpcode.washinmura.jp"
 
-    return post_tweet(text)
+    main = post_tweet(en_text)
+    if not main.get("ok"):
+        return main
+
+    results = [{"lang": "en", "tweet_id": main["tweet_id"], "url": main["url"]}]
+    main_id = main["tweet_id"]
+
+    # --- 回覆（中文）---
+    zh_article = articles.get("zh", {})
+    if zh_article.get("status") == "ok":
+        zh_len = zh_article.get("length", 0)
+        zh_text = f"🇹🇼 中文快報：\n川普發文：{content[:40]}"
+        zh_text += f"\nAI 判讀：{dir_emoji} {direction}"
+        if signals:
+            zh_text += f" | {signals}"
+        zh_text += f"\n完整 {zh_len} 字分析 → trumpcode.washinmura.jp"
+
+        # 隨機延遲 3-8 秒，避免機械感
+        import random
+        time.sleep(random.uniform(3, 8))
+        zh_r = post_tweet(zh_text, reply_to=main_id)
+        if zh_r.get("ok"):
+            results.append({"lang": "zh", "tweet_id": zh_r["tweet_id"], "url": zh_r["url"]})
+
+    # --- 回覆（日文）---
+    ja_article = articles.get("ja", {})
+    if ja_article.get("status") == "ok":
+        ja_len = ja_article.get("length", 0)
+        ja_text = f"🇯🇵 日本語速報：\nトランプ投稿：{content[:40]}"
+        ja_text += f"\nAI判定：{dir_emoji} {direction}"
+        if signals:
+            ja_text += f" | {signals}"
+        ja_text += f"\n全文 {ja_len} 字 → trumpcode.washinmura.jp"
+
+        import random
+        time.sleep(random.uniform(3, 8))
+        ja_r = post_tweet(ja_text, reply_to=main_id)
+        if ja_r.get("ok"):
+            results.append({"lang": "ja", "tweet_id": ja_r["tweet_id"], "url": ja_r["url"]})
+
+    return {"ok": True, "tweets": results, "main_url": main["url"]}
 
 
 def post_daily_summary(date: str, posts_count: int, signals: list = None) -> dict:
