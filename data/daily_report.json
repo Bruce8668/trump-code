@@ -1,14 +1,12 @@
 {
-  "date": "2026-04-03",
-  "generated_at": "2026-04-03T14:41:37Z",
-  "posts_today": 5,
+  "date": "2026-04-04",
+  "generated_at": "2026-04-04T05:41:07Z",
+  "posts_today": 3,
   "latest_post": {
-    "time": "2026-04-03T12:22",
-    "content_preview": "With a little more time, we can easily OPEN THE HORMUZ STRAIT, TAKE THE OIL, & MAKE A FORTUNE. IT WO"
+    "time": "2026-04-04T03:21",
+    "content_preview": "Believers and people of faith find safe harbor in Trump's White House this Easter: https://justthene"
   },
-  "signals_detected": [
-    "IRAN"
-  ],
+  "signals_detected": [],
   "models_triggered": 0,
   "direction_summary": {
     "LONG": 0,
@@ -25,9 +23,9 @@
     "close": 6582.69
   },
   "summary": {
-    "en": "Trump Code Daily Report -- 2026-04-03\nPosts today: 5 | Models triggered: 0\nSignals: IRAN\nConsensus: 0 LONG vs 0 SHORT\nHistorical hit rate: 0.0% (0/0)\nLatest post: With a little more time, we can easily OPEN THE HORMUZ STRAIT, TAKE THE OIL, & MAKE A FORTUNE. IT WO",
-    "zh": "川普密碼每日報告 -- 2026-04-03\n今日推文: 5 篇 | 觸發模型: 0 組\n偵測信號: 伊朗\n共識方向: 0 組看多 vs 0 組看空\n歷史命中率: 0.0% (0/0)\n最新推文: With a little more time, we can easily OPEN THE HORMUZ STRAIT, TAKE THE OIL, & MAKE A FORTUNE. IT WO",
-    "ja": "トランプ・コード日次レポート -- 2026-04-03\n本日の投稿: 5件 | トリガーモデル: 0組\n検出シグナル: イラン\nコンセンサス: 0組ロング vs 0組ショート\n過去の的中率: 0.0% (0/0)\n最新投稿: With a little more time, we can easily OPEN THE HORMUZ STRAIT, TAKE THE OIL, & MAKE A FORTUNE. IT WO"
+    "en": "Trump Code Daily Report -- 2026-04-04\nPosts today: 3 | Models triggered: 0\nSignals: None\nConsensus: 0 LONG vs 0 SHORT\nHistorical hit rate: 0.0% (0/0)\nLatest post: Believers and people of faith find safe harbor in Trump's White House this Easter: https://justthene",
+    "zh": "川普密碼每日報告 -- 2026-04-04\n今日推文: 3 篇 | 觸發模型: 0 組\n偵測信號: 無\n共識方向: 0 組看多 vs 0 組看空\n歷史命中率: 0.0% (0/0)\n最新推文: Believers and people of faith find safe harbor in Trump's White House this Easter: https://justthene",
+    "ja": "トランプ・コード日次レポート -- 2026-04-04\n本日の投稿: 3件 | トリガーモデル: 0組\n検出シグナル: なし\nコンセンサス: 0組ロング vs 0組ショート\n過去の的中率: 0.0% (0/0)\n最新投稿: Believers and people of faith find safe harbor in Trump's White House this Easter: https://justthene"
   },
   "triggered_rules_sample": []
 }
