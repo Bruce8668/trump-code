@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-04-16T15:28:21Z",
-    "evolved_rules_added": 45
+    "last_evolution": "2026-04-17T14:57:51Z",
+    "evolved_rules_added": 41
   },
   "rules": [
     {
@@ -12482,7 +12482,12 @@
       "parents": [
         "kw_energy+kw_interest_rate",
         "excl_heavy+kw_interest_rate"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -13680,7 +13685,12 @@
       "parents": [
         "kw_agreement+open_china",
         "kw_complete_and_total+kw_maga"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14217,6 +14227,30 @@
         "wrong": 0,
         "streak": 0
       }
+    },
+    {
+      "features": [
+        "volume_falling_3d",
+        "kw_ban"
+      ],
+      "direction": "LONG",
+      "hold": 2,
+      "id": "ec56e450de88",
+      "n_cond": 2,
+      "train_trades": 8,
+      "train_win_rate": 75.0,
+      "train_avg": 1.465,
+      "test_trades": 5,
+      "test_win_rate": 100.0,
+      "test_avg": 0.874,
+      "combined_score": 87.5,
+      "origin": "crossover",
+      "born_date": "2026-04-17",
+      "weight": 1.0,
+      "parents": [
+        "kw_tariffs_2plus+kw_thank_you_for_your_attention",
+        "kw_ban+kw_biden"
+      ]
     },
     {
       "features": [
@@ -14776,35 +14810,6 @@
       "parents": [
         "kw_thank_you_for_your_attention+kw_trade",
         "is_friday+kw_beautiful"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "kw_economy",
-        "kw_president_of_the_united_states"
-      ],
-      "direction": "LONG",
-      "hold": 2,
-      "id": "d8667a1b6cd3",
-      "n_cond": 2,
-      "train_trades": 14,
-      "train_win_rate": 78.6,
-      "train_avg": 0.542,
-      "test_trades": 9,
-      "test_win_rate": 88.9,
-      "test_avg": 0.762,
-      "combined_score": 83.7,
-      "origin": "crossover",
-      "born_date": "2026-04-07",
-      "weight": 1.0,
-      "parents": [
-        "kw_economy+kw_interest_rate",
-        "kw_ban+kw_hereby"
       ],
       "learn_stats": {
         "correct": 0,
