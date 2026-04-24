@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-04-23T15:55:13Z",
-    "evolved_rules_added": 46
+    "last_evolution": "2026-04-24T15:10:10Z",
+    "evolved_rules_added": 49
   },
   "rules": [
     {
@@ -12709,7 +12709,12 @@
       "parents": [
         "is_friday+kw_thank_you_for_your_attention",
         "is_friday+kw_dow_2plus"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -12733,7 +12738,12 @@
       "parents": [
         "kw_interest_rate+open_energy",
         "open_energy+open_jobs"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -12905,7 +12915,12 @@
       "parents": [
         "kw_beautiful+kw_tariff_2plus",
         "kw_signed+kw_tariff"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -13730,7 +13745,12 @@
       "parents": [
         "kw_beautiful+kw_interest_rate",
         "is_friday+kw_economy"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
