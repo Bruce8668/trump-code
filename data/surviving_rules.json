@@ -1,7 +1,7 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-04-29T15:57:16Z",
+    "last_evolution": "2026-04-30T15:49:10Z",
     "evolved_rules_added": 47
   },
   "rules": [
@@ -13804,7 +13804,12 @@
       "parents": [
         "kw_economy+kw_interest_rate",
         "kw_president_of_the_united_states+open_ban"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
