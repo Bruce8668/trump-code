@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-05-01T14:57:11Z",
-    "evolved_rules_added": 43
+    "last_evolution": "2026-05-02T14:49:28Z",
+    "evolved_rules_added": 45
   },
   "rules": [
     {
@@ -13834,6 +13834,37 @@
       "parents": [
         "is_friday+kw_dow_2plus",
         "is_friday+kw_beautiful"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
+        "kw_thank_you_for_your_attention",
+        "kw_jobs",
+        "kw_trade",
+        "kw_economy"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "b04bd1b660fd",
+      "n_cond": 4,
+      "train_trades": 7,
+      "train_win_rate": 100.0,
+      "train_avg": 2.797,
+      "test_trades": 5,
+      "test_win_rate": 80.0,
+      "test_avg": 0.778,
+      "combined_score": 90.0,
+      "origin": "crossover",
+      "born_date": "2026-05-02",
+      "weight": 1.0,
+      "parents": [
+        "kw_executive_order+kw_jobs",
+        "kw_economy+kw_trade"
       ]
     },
     {
@@ -14685,7 +14716,12 @@
       "parents": [
         "kw_deal_2plus+kw_dow_2plus",
         "is_friday+kw_tremendous"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14795,35 +14831,6 @@
       "parents": [
         "kw_beautiful+kw_interest_rate",
         "is_friday+kw_economy"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "open_tariff",
-        "is_friday"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "a97f68f8bada",
-      "n_cond": 2,
-      "train_trades": 11,
-      "train_win_rate": 72.7,
-      "train_avg": 0.981,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 0.597,
-      "combined_score": 86.4,
-      "origin": "crossover",
-      "born_date": "2026-04-06",
-      "weight": 1.0,
-      "parents": [
-        "is_friday+open_tariff",
-        "is_friday+kw_dow_2plus"
       ],
       "learn_stats": {
         "correct": 0,
