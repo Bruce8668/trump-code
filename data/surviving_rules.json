@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-05-14T16:11:15Z",
-    "evolved_rules_added": 46
+    "last_evolution": "2026-05-15T16:04:48Z",
+    "evolved_rules_added": 40
   },
   "rules": [
     {
@@ -12572,7 +12572,12 @@
       "parents": [
         "is_friday+kw_interest_rate",
         "kw_dow_2plus+kw_economy"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14196,6 +14201,31 @@
     },
     {
       "features": [
+        "open_dow",
+        "kw_tariffs",
+        "kw_signed"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "8050174a81ac",
+      "n_cond": 3,
+      "train_trades": 5,
+      "train_win_rate": 80.0,
+      "train_avg": 0.486,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 1.132,
+      "combined_score": 90.0,
+      "origin": "crossover",
+      "born_date": "2026-05-15",
+      "weight": 1.0,
+      "parents": [
+        "kw_disaster+kw_india",
+        "kw_deal+kw_signed"
+      ]
+    },
+    {
+      "features": [
         "kw_amazing",
         "volume_spike"
       ],
@@ -14816,36 +14846,6 @@
       "born_date": "2026-03-17",
       "weight": 1.0,
       "parent": "kw_beautiful+kw_tariffs_2plus+volume_falling_3d",
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "avg_len_long",
-        "kw_tremendous",
-        "is_friday"
-      ],
-      "direction": "LONG",
-      "hold": 1,
-      "id": "b7e80857bde5",
-      "n_cond": 3,
-      "train_trades": 8,
-      "train_win_rate": 75.0,
-      "train_avg": 0.226,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 0.456,
-      "combined_score": 87.5,
-      "origin": "crossover",
-      "born_date": "2026-03-21",
-      "weight": 1.0,
-      "parents": [
-        "avg_len_long+kw_india",
-        "is_friday+kw_tremendous"
-      ],
       "learn_stats": {
         "correct": 0,
         "wrong": 0,
