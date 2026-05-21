@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated_at": "2026-05-20T16:53:21Z",
+    "updated_at": "2026-05-21T16:40:17Z",
     "total_rules": 600,
     "eliminated": 0,
     "rules_with_data": 0
@@ -12668,6 +12668,35 @@
     },
     {
       "features": [
+        "open_china",
+        "kw_thank_you_for_your_attention"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "8c44b53b64c1",
+      "n_cond": 2,
+      "train_trades": 11,
+      "train_win_rate": 90.9,
+      "train_avg": 2.72,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 0.527,
+      "combined_score": 95.5,
+      "origin": "crossover",
+      "born_date": "2026-05-20",
+      "weight": 1.0,
+      "parents": [
+        "kw_thank_you_for_your_attention+open_energy",
+        "kw_inflation+open_china"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
         "open_energy",
         "kw_thank_you_for_your_attention"
       ],
@@ -14823,31 +14852,6 @@
       "test_trades": 4,
       "test_win_rate": 75.0,
       "test_avg": 0.536,
-      "combined_score": 87.5,
-      "origin": "distilled",
-      "born_date": "2026-03-15",
-      "weight": 1.0,
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "kw_interest_rate",
-        "excl_heavy"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "0c68d5b3ab31",
-      "n_cond": 2,
-      "train_trades": 9,
-      "train_win_rate": 100.0,
-      "train_avg": 1.299,
-      "test_trades": 4,
-      "test_win_rate": 75.0,
-      "test_avg": 0.849,
       "combined_score": 87.5,
       "origin": "distilled",
       "born_date": "2026-03-15",
