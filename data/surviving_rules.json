@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-05-21T16:40:17Z",
-    "evolved_rules_added": 45
+    "last_evolution": "2026-05-22T16:27:42Z",
+    "evolved_rules_added": 44
   },
   "rules": [
     {
@@ -14397,7 +14397,12 @@
       "parents": [
         "kw_corrupt+kw_tariff",
         "kw_ban+kw_biden"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [

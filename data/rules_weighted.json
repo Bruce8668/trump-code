@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated_at": "2026-05-21T16:40:17Z",
+    "updated_at": "2026-05-22T16:27:42Z",
     "total_rules": 600,
     "eliminated": 0,
     "rules_with_data": 0
@@ -14377,6 +14377,36 @@
     },
     {
       "features": [
+        "kw_ban",
+        "open_trade",
+        "kw_biden"
+      ],
+      "direction": "LONG",
+      "hold": 2,
+      "id": "5ac8f5913f77",
+      "n_cond": 3,
+      "train_trades": 5,
+      "train_win_rate": 80.0,
+      "train_avg": 2.467,
+      "test_trades": 4,
+      "test_win_rate": 100.0,
+      "test_avg": 0.845,
+      "combined_score": 90.0,
+      "origin": "crossover",
+      "born_date": "2026-05-21",
+      "weight": 1.0,
+      "parents": [
+        "kw_corrupt+kw_tariff",
+        "kw_ban+kw_biden"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
         "kw_president_of_the_united_states",
         "kw_dow_2plus"
       ],
@@ -14827,31 +14857,6 @@
       "test_trades": 4,
       "test_win_rate": 75.0,
       "test_avg": 0.638,
-      "combined_score": 87.5,
-      "origin": "distilled",
-      "born_date": "2026-03-15",
-      "weight": 1.0,
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "kw_interest_rate",
-        "kw_beautiful"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "7ac641483d05",
-      "n_cond": 2,
-      "train_trades": 7,
-      "train_win_rate": 100.0,
-      "train_avg": 1.996,
-      "test_trades": 4,
-      "test_win_rate": 75.0,
-      "test_avg": 0.536,
       "combined_score": 87.5,
       "origin": "distilled",
       "born_date": "2026-03-15",
