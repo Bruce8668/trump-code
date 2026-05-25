@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-05-24T15:05:34Z",
-    "evolved_rules_added": 39
+    "last_evolution": "2026-05-25T16:23:55Z",
+    "evolved_rules_added": 48
   },
   "rules": [
     {
@@ -12717,7 +12717,12 @@
       "parents": [
         "kw_perfect+kw_thank_you_for_your_attention",
         "is_friday+open_tariffs"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14452,7 +14457,12 @@
       "parents": [
         "kw_beautiful+kw_signed",
         "kw_economy+open_tariffs"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14710,7 +14720,12 @@
       "parents": [
         "is_friday+kw_beautiful",
         "kw_economy+open_tariffs"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14734,6 +14749,36 @@
       "parents": [
         "kw_energy+kw_perfect",
         "kw_deal+kw_signed"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
+        "open_tariff",
+        "is_friday",
+        "kw_tariffs"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "b23cb21b2d16",
+      "n_cond": 3,
+      "train_trades": 9,
+      "train_win_rate": 77.8,
+      "train_avg": 0.965,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 0.597,
+      "combined_score": 88.9,
+      "origin": "crossover",
+      "born_date": "2026-05-25",
+      "weight": 1.0,
+      "parents": [
+        "kw_interest_rate+open_dow",
+        "is_friday+kw_corrupt"
       ]
     },
     {
@@ -14816,35 +14861,6 @@
       "parents": [
         "kw_agreement+open_china",
         "kw_complete_and_total+kw_maga"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "is_friday",
-        "kw_jobs"
-      ],
-      "direction": "LONG",
-      "hold": 1,
-      "id": "a6cf92d22932",
-      "n_cond": 2,
-      "train_trades": 13,
-      "train_win_rate": 76.9,
-      "train_avg": 0.326,
-      "test_trades": 5,
-      "test_win_rate": 100.0,
-      "test_avg": 0.618,
-      "combined_score": 88.5,
-      "origin": "crossover",
-      "born_date": "2026-05-08",
-      "weight": 1.0,
-      "parents": [
-        "is_friday+kw_beautiful",
-        "kw_deal_2plus+kw_economy"
       ],
       "learn_stats": {
         "correct": 0,
