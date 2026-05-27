@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-05-26T17:28:19Z",
-    "evolved_rules_added": 48
+    "last_evolution": "2026-05-27T17:20:41Z",
+    "evolved_rules_added": 46
   },
   "rules": [
     {
@@ -14488,7 +14488,12 @@
       "parents": [
         "kw_thank_you_for_your_attention+kw_trade",
         "is_friday+kw_economy"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14814,6 +14819,31 @@
     },
     {
       "features": [
+        "kw_beautiful",
+        "kw_thank_you_for_your_attention",
+        "is_friday"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "cbd4daeb0d87",
+      "n_cond": 3,
+      "train_trades": 9,
+      "train_win_rate": 77.8,
+      "train_avg": 0.827,
+      "test_trades": 6,
+      "test_win_rate": 100.0,
+      "test_avg": 0.689,
+      "combined_score": 88.9,
+      "origin": "crossover",
+      "born_date": "2026-05-27",
+      "weight": 1.0,
+      "parents": [
+        "is_friday+kw_thank_you_for_your_attention",
+        "kw_beautiful+kw_interest_rate"
+      ]
+    },
+    {
+      "features": [
         "open_tariff",
         "volume_falling_3d"
       ],
@@ -14834,35 +14864,6 @@
       "parents": [
         "is_friday+kw_economy",
         "kw_beautiful+open_tariffs"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "kw_signed",
-        "kw_tariffs"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "ba52db3258de",
-      "n_cond": 2,
-      "train_trades": 13,
-      "train_win_rate": 76.9,
-      "train_avg": 0.656,
-      "test_trades": 4,
-      "test_win_rate": 100.0,
-      "test_avg": 1.028,
-      "combined_score": 88.5,
-      "origin": "crossover",
-      "born_date": "2026-04-12",
-      "weight": 1.0,
-      "parents": [
-        "kw_tariffs+open_thank_you_for_your_attention",
-        "kw_interest_rate+kw_signed"
       ],
       "learn_stats": {
         "correct": 0,
