@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-06-01T19:21:20Z",
-    "evolved_rules_added": 44
+    "last_evolution": "2026-06-02T18:06:09Z",
+    "evolved_rules_added": 40
   },
   "rules": [
     {
@@ -13661,6 +13661,31 @@
     },
     {
       "features": [
+        "kw_energy",
+        "kw_thank_you_for_your_attention",
+        "kw_disaster"
+      ],
+      "direction": "LONG",
+      "hold": 1,
+      "id": "71ab1876efd5",
+      "n_cond": 3,
+      "train_trades": 6,
+      "train_win_rate": 83.3,
+      "train_avg": 0.715,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 0.51,
+      "combined_score": 91.7,
+      "origin": "crossover",
+      "born_date": "2026-06-02",
+      "weight": 1.0,
+      "parents": [
+        "kw_energy+kw_perfect",
+        "kw_disaster+kw_india"
+      ]
+    },
+    {
+      "features": [
         "is_friday",
         "kw_energy"
       ],
@@ -14631,7 +14656,12 @@
       "origin": "mutation_replace",
       "born_date": "2026-06-01",
       "weight": 1.0,
-      "parent": "kw_signed+kw_tariffs+open_thank_you_for_your_attention"
+      "parent": "kw_signed+kw_tariffs+open_thank_you_for_your_attention",
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14829,36 +14859,6 @@
       "parents": [
         "kw_inflation+kw_trillion",
         "excl_heavy+kw_dow_2plus"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "is_friday",
-        "open_tariffs",
-        "kw_tariff"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "539c9d5ceaea",
-      "n_cond": 3,
-      "train_trades": 9,
-      "train_win_rate": 77.8,
-      "train_avg": 0.965,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 0.597,
-      "combined_score": 88.9,
-      "origin": "crossover",
-      "born_date": "2026-05-03",
-      "weight": 1.0,
-      "parents": [
-        "is_friday+kw_dow_2plus",
-        "kw_corrupt+kw_tariff"
       ],
       "learn_stats": {
         "correct": 0,
