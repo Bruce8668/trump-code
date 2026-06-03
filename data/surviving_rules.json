@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-06-02T18:06:09Z",
-    "evolved_rules_added": 40
+    "last_evolution": "2026-06-03T18:24:18Z",
+    "evolved_rules_added": 44
   },
   "rules": [
     {
@@ -13220,6 +13220,31 @@
     },
     {
       "features": [
+        "open_china",
+        "kw_russia",
+        "kw_china"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "4a4f1e00664f",
+      "n_cond": 3,
+      "train_trades": 7,
+      "train_win_rate": 85.7,
+      "train_avg": 1.285,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 0.571,
+      "combined_score": 92.9,
+      "origin": "crossover",
+      "born_date": "2026-06-03",
+      "weight": 1.0,
+      "parents": [
+        "kw_agreement+kw_china",
+        "kw_oil+kw_russia"
+      ]
+    },
+    {
+      "features": [
         "kw_signed",
         "kw_tariffs"
       ],
@@ -13682,7 +13707,12 @@
       "parents": [
         "kw_energy+kw_perfect",
         "kw_disaster+kw_india"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14829,36 +14859,6 @@
       "parents": [
         "kw_tariffs+kw_thank_you_for_your_attention",
         "kw_corrupt+kw_thank_you_for_your_attention"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "excl_heavy",
-        "open_thank_you_for_your_attention",
-        "kw_dow_2plus"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "6f6ab5d5236f",
-      "n_cond": 3,
-      "train_trades": 9,
-      "train_win_rate": 77.8,
-      "train_avg": 1.073,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 1.101,
-      "combined_score": 88.9,
-      "origin": "crossover",
-      "born_date": "2026-04-15",
-      "weight": 1.0,
-      "parents": [
-        "kw_inflation+kw_trillion",
-        "excl_heavy+kw_dow_2plus"
       ],
       "learn_stats": {
         "correct": 0,
