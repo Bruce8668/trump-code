@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-06-05T16:30:55Z",
-    "evolved_rules_added": 48
+    "last_evolution": "2026-06-06T15:17:16Z",
+    "evolved_rules_added": 40
   },
   "rules": [
     {
@@ -12632,7 +12632,12 @@
       "parents": [
         "kw_ban+kw_biden",
         "kw_deal_2plus+kw_dow_2plus"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -12657,7 +12662,12 @@
       "parents": [
         "is_monday+kw_disaster",
         "is_friday+kw_dow_2plus"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
