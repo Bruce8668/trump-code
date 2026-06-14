@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-06-13T15:43:49Z",
-    "evolved_rules_added": 45
+    "last_evolution": "2026-06-14T15:49:58Z",
+    "evolved_rules_added": 42
   },
   "rules": [
     {
@@ -13889,7 +13889,12 @@
       "parents": [
         "kw_signed+open_tariff",
         "is_friday+kw_economy"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
