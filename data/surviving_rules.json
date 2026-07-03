@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-07-02T16:06:28Z",
-    "evolved_rules_added": 43
+    "last_evolution": "2026-07-03T15:53:55Z",
+    "evolved_rules_added": 48
   },
   "rules": [
     {
@@ -12788,6 +12788,30 @@
     },
     {
       "features": [
+        "kw_president_of_the_united_states",
+        "kw_ban"
+      ],
+      "direction": "LONG",
+      "hold": 2,
+      "id": "31379bf2e97d",
+      "n_cond": 2,
+      "train_trades": 6,
+      "train_win_rate": 100.0,
+      "train_avg": 1.157,
+      "test_trades": 6,
+      "test_win_rate": 100.0,
+      "test_avg": 0.998,
+      "combined_score": 100.0,
+      "origin": "crossover",
+      "born_date": "2026-07-03",
+      "weight": 1.0,
+      "parents": [
+        "kw_amazing+kw_ban",
+        "kw_india+kw_never_let_you_down"
+      ]
+    },
+    {
+      "features": [
         "kw_maga",
         "open_ukraine"
       ],
@@ -12893,7 +12917,12 @@
       "parents": [
         "kw_dow_2plus+kw_interest_rate",
         "kw_president_of_the_united_states+open_ban"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14840,33 +14869,6 @@
         "avg_len_long+kw_energy_2plus",
         "kw_india+kw_never_let_you_down"
       ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "open_trade",
-        "kw_thank_you_for_your_attention",
-        "volume_falling_3d"
-      ],
-      "direction": "LONG",
-      "hold": 2,
-      "id": "46b75377d669",
-      "n_cond": 3,
-      "train_trades": 5,
-      "train_win_rate": 80.0,
-      "train_avg": 1.146,
-      "test_trades": 4,
-      "test_win_rate": 100.0,
-      "test_avg": 0.942,
-      "combined_score": 90.0,
-      "origin": "mutation_replace",
-      "born_date": "2026-05-19",
-      "weight": 1.0,
-      "parent": "kw_tariffs_2plus+kw_thank_you_for_your_attention+volume_falling_3d",
       "learn_stats": {
         "correct": 0,
         "wrong": 0,
