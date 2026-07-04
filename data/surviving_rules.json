@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-07-03T15:53:55Z",
-    "evolved_rules_added": 48
+    "last_evolution": "2026-07-04T15:06:50Z",
+    "evolved_rules_added": 44
   },
   "rules": [
     {
@@ -12808,7 +12808,12 @@
       "parents": [
         "kw_amazing+kw_ban",
         "kw_india+kw_never_let_you_down"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
