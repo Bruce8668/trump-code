@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-07-04T15:06:50Z",
-    "evolved_rules_added": 44
+    "last_evolution": "2026-07-05T15:13:48Z",
+    "evolved_rules_added": 45
   },
   "rules": [
     {
@@ -12961,6 +12961,31 @@
     },
     {
       "features": [
+        "kw_president_of_the_united_states",
+        "kw_dow_2plus",
+        "kw_thank_you_for_your_attention"
+      ],
+      "direction": "LONG",
+      "hold": 1,
+      "id": "2dc8a31c56c2",
+      "n_cond": 3,
+      "train_trades": 7,
+      "train_win_rate": 100.0,
+      "train_avg": 1.187,
+      "test_trades": 9,
+      "test_win_rate": 88.9,
+      "test_avg": 0.577,
+      "combined_score": 94.4,
+      "origin": "crossover",
+      "born_date": "2026-07-05",
+      "weight": 1.0,
+      "parents": [
+        "kw_deal_2plus+kw_dow_2plus",
+        "kw_president_of_the_united_states+open_ban"
+      ]
+    },
+    {
+      "features": [
         "open_energy",
         "kw_thank_you_for_your_attention"
       ],
@@ -14844,35 +14869,6 @@
       "parents": [
         "kw_disaster+kw_india",
         "kw_deal+kw_signed"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "kw_president_of_the_united_states",
-        "kw_energy_2plus"
-      ],
-      "direction": "LONG",
-      "hold": 2,
-      "id": "c7bbd1212061",
-      "n_cond": 2,
-      "train_trades": 5,
-      "train_win_rate": 80.0,
-      "train_avg": 0.198,
-      "test_trades": 4,
-      "test_win_rate": 100.0,
-      "test_avg": 0.968,
-      "combined_score": 90.0,
-      "origin": "crossover",
-      "born_date": "2026-05-16",
-      "weight": 1.0,
-      "parents": [
-        "avg_len_long+kw_energy_2plus",
-        "kw_india+kw_never_let_you_down"
       ],
       "learn_stats": {
         "correct": 0,
