@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated_at": "2026-07-06T16:52:44Z",
+    "updated_at": "2026-07-07T16:32:50Z",
     "total_rules": 600,
     "eliminated": 0,
     "rules_with_data": 0
@@ -13575,6 +13575,36 @@
     },
     {
       "features": [
+        "open_trade",
+        "kw_inflation",
+        "kw_deal"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "1ff4160d4613",
+      "n_cond": 3,
+      "train_trades": 7,
+      "train_win_rate": 85.7,
+      "train_avg": 2.347,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 0.704,
+      "combined_score": 92.9,
+      "origin": "crossover",
+      "born_date": "2026-07-06",
+      "weight": 1.0,
+      "parents": [
+        "kw_deal+kw_inflation",
+        "open_dow+open_trade"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
         "kw_signed",
         "kw_tariffs"
       ],
@@ -14845,36 +14875,6 @@
       "parents": [
         "is_friday+kw_economy",
         "kw_ban+kw_biden"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "open_dow",
-        "kw_tariffs",
-        "kw_signed"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "8050174a81ac",
-      "n_cond": 3,
-      "train_trades": 5,
-      "train_win_rate": 80.0,
-      "train_avg": 0.486,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 1.132,
-      "combined_score": 90.0,
-      "origin": "crossover",
-      "born_date": "2026-05-15",
-      "weight": 1.0,
-      "parents": [
-        "kw_disaster+kw_india",
-        "kw_deal+kw_signed"
       ],
       "learn_stats": {
         "correct": 0,
