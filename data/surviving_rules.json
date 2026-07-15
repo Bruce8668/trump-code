@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-07-14T15:23:59Z",
-    "evolved_rules_added": 43
+    "last_evolution": "2026-07-15T15:27:09Z",
+    "evolved_rules_added": 48
   },
   "rules": [
     {
@@ -14243,7 +14243,12 @@
       "origin": "mutation_replace",
       "born_date": "2026-07-14",
       "weight": 1.0,
-      "parent": "kw_amazing+kw_ban+volume_spike"
+      "parent": "kw_amazing+kw_ban+volume_spike",
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [

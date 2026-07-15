@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated_at": "2026-07-14T15:23:59Z",
+    "updated_at": "2026-07-15T15:27:09Z",
     "total_rules": 600,
     "eliminated": 0,
     "rules_with_data": 0
@@ -14226,6 +14226,33 @@
     },
     {
       "features": [
+        "kw_incredible_2plus",
+        "kw_amazing",
+        "volume_spike"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "800c81da2dcd",
+      "n_cond": 3,
+      "train_trades": 6,
+      "train_win_rate": 83.3,
+      "train_avg": 0.429,
+      "test_trades": 4,
+      "test_win_rate": 100.0,
+      "test_avg": 1.012,
+      "combined_score": 91.7,
+      "origin": "mutation_replace",
+      "born_date": "2026-07-14",
+      "weight": 1.0,
+      "parent": "kw_amazing+kw_ban+volume_spike",
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
         "is_friday",
         "kw_energy"
       ],
@@ -14845,35 +14872,6 @@
       "parents": [
         "kw_thank_you_for_your_attention+open_inflation",
         "kw_economy+kw_interest_rate"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "kw_india",
-        "kw_president_of_the_united_states"
-      ],
-      "direction": "LONG",
-      "hold": 1,
-      "id": "99ff347d9c7e",
-      "n_cond": 2,
-      "train_trades": 5,
-      "train_win_rate": 80.0,
-      "train_avg": 0.778,
-      "test_trades": 5,
-      "test_win_rate": 100.0,
-      "test_avg": 0.816,
-      "combined_score": 90.0,
-      "origin": "crossover",
-      "born_date": "2026-05-05",
-      "weight": 1.0,
-      "parents": [
-        "kw_ban+kw_president_of_the_united_states",
-        "kw_disaster+kw_india"
       ],
       "learn_stats": {
         "correct": 0,
