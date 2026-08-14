@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-08-13T14:58:45Z",
-    "evolved_rules_added": 46
+    "last_evolution": "2026-08-14T14:52:37Z",
+    "evolved_rules_added": 42
   },
   "rules": [
     {
@@ -12847,6 +12847,31 @@
     },
     {
       "features": [
+        "open_trade",
+        "kw_thank_you_for_your_attention",
+        "volume_falling_3d"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "b9d471755b4d",
+      "n_cond": 3,
+      "train_trades": 5,
+      "train_win_rate": 100.0,
+      "train_avg": 2.312,
+      "test_trades": 4,
+      "test_win_rate": 100.0,
+      "test_avg": 1.023,
+      "combined_score": 100.0,
+      "origin": "crossover",
+      "born_date": "2026-08-14",
+      "weight": 1.0,
+      "parents": [
+        "kw_tariffs_2plus+kw_thank_you_for_your_attention",
+        "excl_heavy+kw_tariffs_2plus"
+      ]
+    },
+    {
+      "features": [
         "kw_maga",
         "open_ukraine"
       ],
@@ -14453,7 +14478,12 @@
       "parents": [
         "kw_inflation+kw_trillion",
         "kw_china+kw_thank_you_for_your_attention"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14836,36 +14866,6 @@
       "parents": [
         "kw_fantastic+kw_tremendous_2plus",
         "open_ban+open_president_of_the_united_states"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "kw_never_let_you_down",
-        "open_thank_you_for_your_attention",
-        "kw_tremendous"
-      ],
-      "direction": "LONG",
-      "hold": 1,
-      "id": "f4153677fa37",
-      "n_cond": 3,
-      "train_trades": 5,
-      "train_win_rate": 100.0,
-      "train_avg": 0.828,
-      "test_trades": 5,
-      "test_win_rate": 80.0,
-      "test_avg": 0.64,
-      "combined_score": 90.0,
-      "origin": "crossover",
-      "born_date": "2026-04-11",
-      "weight": 1.0,
-      "parents": [
-        "kw_tremendous+open_thank_you_for_your_attention",
-        "kw_india+kw_never_let_you_down"
       ],
       "learn_stats": {
         "correct": 0,
