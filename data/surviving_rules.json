@@ -2,7 +2,9 @@
   "meta": {
     "total_surviving": 600,
     "last_evolution": "2026-08-16T14:23:52Z",
-    "evolved_rules_added": 47
+    "evolved_rules_added": 47,
+    "last_learning": "2026-08-17T14:29:20Z",
+    "eliminated_count": 0
   },
   "rules": [
     {
@@ -14541,7 +14543,12 @@
       "parents": [
         "kw_maga+kw_trade",
         "kw_agreement+open_china"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
