@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-08-25T14:45:05Z",
-    "evolved_rules_added": 43
+    "last_evolution": "2026-08-26T14:44:11Z",
+    "evolved_rules_added": 46
   },
   "rules": [
     {
@@ -12928,7 +12928,12 @@
       "parents": [
         "kw_deal+kw_signed",
         "kw_beautiful+kw_tariffs_2plus"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
