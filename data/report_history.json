@@ -1754,5 +1754,17 @@
       "DEAL_ONLY"
     ],
     "consensus": "NEUTRAL"
+  },
+  {
+    "date": "2026-08-30",
+    "posts": 12,
+    "triggered": 2,
+    "long": 2,
+    "short": 0,
+    "signals": [
+      "DEAL",
+      "DEAL_ONLY"
+    ],
+    "consensus": "BULLISH"
   }
 ]
