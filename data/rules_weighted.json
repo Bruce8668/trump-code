@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated_at": "2026-09-14T19:04:41Z",
+    "updated_at": "2026-09-15T17:58:46Z",
     "total_rules": 600,
     "eliminated": 0,
     "rules_with_data": 0
@@ -13203,6 +13203,36 @@
     },
     {
       "features": [
+        "open_dow",
+        "kw_energy",
+        "kw_president_of_the_united_states"
+      ],
+      "direction": "LONG",
+      "hold": 1,
+      "id": "9ca0c1a05dcb",
+      "n_cond": 3,
+      "train_trades": 10,
+      "train_win_rate": 90.0,
+      "train_avg": 0.7,
+      "test_trades": 5,
+      "test_win_rate": 100.0,
+      "test_avg": 0.737,
+      "combined_score": 95.0,
+      "origin": "crossover",
+      "born_date": "2026-09-14",
+      "weight": 1.0,
+      "parents": [
+        "kw_india+kw_never_let_you_down",
+        "kw_energy+open_dow"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
         "is_friday",
         "kw_thank_you_for_your_attention",
         "questions_yes"
@@ -14871,33 +14901,6 @@
         "kw_beautiful+kw_tariffs_2plus",
         "kw_interest_rate+volume_falling_3d"
       ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "volume_falling_3d",
-        "kw_thank_you_for_your_attention",
-        "kw_jobs"
-      ],
-      "direction": "LONG",
-      "hold": 2,
-      "id": "b96426746419",
-      "n_cond": 3,
-      "train_trades": 6,
-      "train_win_rate": 83.3,
-      "train_avg": 1.143,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 1.058,
-      "combined_score": 91.7,
-      "origin": "mutation_replace",
-      "born_date": "2026-09-03",
-      "weight": 1.0,
-      "parent": "kw_agreement+kw_jobs+kw_thank_you_for_your_attention",
       "learn_stats": {
         "correct": 0,
         "wrong": 0,

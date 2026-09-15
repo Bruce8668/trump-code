@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-09-14T19:04:41Z",
-    "evolved_rules_added": 44
+    "last_evolution": "2026-09-15T17:58:46Z",
+    "evolved_rules_added": 41
   },
   "rules": [
     {
@@ -13058,6 +13058,27 @@
     },
     {
       "features": [
+        "kw_president_of_the_united_states",
+        "volume_spike"
+      ],
+      "direction": "LONG",
+      "hold": 3,
+      "id": "f22c4e16e1fb",
+      "n_cond": 2,
+      "train_trades": 5,
+      "train_win_rate": 100.0,
+      "train_avg": 0.981,
+      "test_trades": 4,
+      "test_win_rate": 100.0,
+      "test_avg": 1.293,
+      "combined_score": 100.0,
+      "origin": "mutation_replace",
+      "born_date": "2026-09-15",
+      "weight": 1.0,
+      "parent": "kw_president_of_the_united_states+open_ban"
+    },
+    {
+      "features": [
         "kw_maga",
         "open_ukraine"
       ],
@@ -13223,7 +13244,12 @@
       "parents": [
         "kw_india+kw_never_let_you_down",
         "kw_energy+open_dow"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14865,35 +14891,6 @@
       "parents": [
         "kw_maga+kw_trade",
         "kw_agreement+open_china"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "open_trade",
-        "volume_falling_3d"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "e8251c08835e",
-      "n_cond": 2,
-      "train_trades": 6,
-      "train_win_rate": 83.3,
-      "train_avg": 1.31,
-      "test_trades": 4,
-      "test_win_rate": 100.0,
-      "test_avg": 1.023,
-      "combined_score": 91.7,
-      "origin": "crossover",
-      "born_date": "2026-08-18",
-      "weight": 1.0,
-      "parents": [
-        "kw_beautiful+kw_tariffs_2plus",
-        "kw_interest_rate+volume_falling_3d"
       ],
       "learn_stats": {
         "correct": 0,
