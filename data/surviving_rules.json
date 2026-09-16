@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-09-15T17:58:46Z",
-    "evolved_rules_added": 41
+    "last_evolution": "2026-09-16T18:00:30Z",
+    "evolved_rules_added": 47
   },
   "rules": [
     {
@@ -13075,7 +13075,12 @@
       "origin": "mutation_replace",
       "born_date": "2026-09-15",
       "weight": 1.0,
-      "parent": "kw_president_of_the_united_states+open_ban"
+      "parent": "kw_president_of_the_united_states+open_ban",
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
@@ -14281,6 +14286,31 @@
     },
     {
       "features": [
+        "kw_energy",
+        "is_friday",
+        "kw_thank_you_for_your_attention"
+      ],
+      "direction": "LONG",
+      "hold": 1,
+      "id": "6cbef0992180",
+      "n_cond": 3,
+      "train_trades": 13,
+      "train_win_rate": 84.6,
+      "train_avg": 0.552,
+      "test_trades": 4,
+      "test_win_rate": 100.0,
+      "test_avg": 0.51,
+      "combined_score": 92.3,
+      "origin": "crossover",
+      "born_date": "2026-09-16",
+      "weight": 1.0,
+      "parents": [
+        "is_friday+kw_beautiful",
+        "kw_energy+kw_perfect"
+      ]
+    },
+    {
+      "features": [
         "kw_oil",
         "is_friday"
       ],
@@ -14862,35 +14892,6 @@
       "parents": [
         "is_friday+kw_tariffs_2plus",
         "kw_deal+kw_hereby"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "open_russia",
-        "open_china"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "f3a46643de65",
-      "n_cond": 2,
-      "train_trades": 6,
-      "train_win_rate": 83.3,
-      "train_avg": 0.943,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 0.571,
-      "combined_score": 91.7,
-      "origin": "crossover",
-      "born_date": "2026-08-16",
-      "weight": 1.0,
-      "parents": [
-        "kw_maga+kw_trade",
-        "kw_agreement+open_china"
       ],
       "learn_stats": {
         "correct": 0,
