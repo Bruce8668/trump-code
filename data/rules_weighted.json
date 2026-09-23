@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated_at": "2026-09-22T17:59:26Z",
+    "updated_at": "2026-09-23T18:17:45Z",
     "total_rules": 600,
     "eliminated": 0,
     "rules_with_data": 0
@@ -14230,6 +14230,37 @@
     },
     {
       "features": [
+        "kw_jobs",
+        "kw_energy",
+        "both_tariff_and_deal",
+        "kw_thank_you_for_your_attention"
+      ],
+      "direction": "LONG",
+      "hold": 2,
+      "id": "2fa5af54a7a9",
+      "n_cond": 4,
+      "train_trades": 7,
+      "train_win_rate": 85.7,
+      "train_avg": 0.367,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 0.642,
+      "combined_score": 92.9,
+      "origin": "crossover",
+      "born_date": "2026-09-22",
+      "weight": 1.0,
+      "parents": [
+        "kw_energy+kw_perfect",
+        "both_tariff_and_deal+kw_disaster"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
         "kw_signed",
         "kw_tariffs"
       ],
@@ -14870,36 +14901,6 @@
       "born_date": "2026-07-14",
       "weight": 1.0,
       "parent": "kw_amazing+kw_ban+volume_spike",
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "open_thank_you_for_your_attention",
-        "kw_inflation",
-        "open_inflation"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "81d2bdba4133",
-      "n_cond": 3,
-      "train_trades": 6,
-      "train_win_rate": 83.3,
-      "train_avg": 0.986,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 0.35,
-      "combined_score": 91.7,
-      "origin": "crossover",
-      "born_date": "2026-08-13",
-      "weight": 1.0,
-      "parents": [
-        "kw_inflation+kw_trillion",
-        "kw_china+kw_thank_you_for_your_attention"
-      ],
       "learn_stats": {
         "correct": 0,
         "wrong": 0,
