@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updated_at": "2026-10-03T17:50:22Z",
+    "updated_at": "2026-10-04T18:01:07Z",
     "total_rules": 600,
     "eliminated": 0,
     "rules_with_data": 0
@@ -13115,6 +13115,36 @@
     },
     {
       "features": [
+        "kw_signed",
+        "kw_complete_and_total",
+        "kw_maga"
+      ],
+      "direction": "LONG",
+      "hold": 1,
+      "id": "308248e98f51",
+      "n_cond": 3,
+      "train_trades": 7,
+      "train_win_rate": 100.0,
+      "train_avg": 0.756,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 0.596,
+      "combined_score": 100.0,
+      "origin": "crossover",
+      "born_date": "2026-10-03",
+      "weight": 1.0,
+      "parents": [
+        "kw_complete_and_total+kw_maga",
+        "both_tariff_and_deal+kw_dow_2plus"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
         "kw_maga",
         "open_ukraine"
       ],
@@ -13220,6 +13250,36 @@
       "parents": [
         "kw_dow_2plus+kw_interest_rate",
         "kw_president_of_the_united_states+open_ban"
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
+    },
+    {
+      "features": [
+        "kw_dow_2plus",
+        "kw_president_of_the_united_states",
+        "open_president_of_the_united_states"
+      ],
+      "direction": "LONG",
+      "hold": 2,
+      "id": "1e46de3015f4",
+      "n_cond": 3,
+      "train_trades": 11,
+      "train_win_rate": 90.9,
+      "train_avg": 0.97,
+      "test_trades": 3,
+      "test_win_rate": 100.0,
+      "test_avg": 1.128,
+      "combined_score": 95.5,
+      "origin": "crossover",
+      "born_date": "2026-10-03",
+      "weight": 1.0,
+      "parents": [
+        "kw_president_of_the_united_states+open_ban",
+        "kw_dow_2plus+kw_executive_order"
       ],
       "learn_stats": {
         "correct": 0,
@@ -14841,66 +14901,6 @@
       "parents": [
         "kw_energy+kw_perfect",
         "kw_disaster+kw_india"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "open_tariff",
-        "is_friday",
-        "kw_economy"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "bb94c4802e7b",
-      "n_cond": 3,
-      "train_trades": 6,
-      "train_win_rate": 83.3,
-      "train_avg": 1.801,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 0.597,
-      "combined_score": 91.7,
-      "origin": "crossover",
-      "born_date": "2026-06-13",
-      "weight": 1.0,
-      "parents": [
-        "kw_signed+open_tariff",
-        "is_friday+kw_economy"
-      ],
-      "learn_stats": {
-        "correct": 0,
-        "wrong": 0,
-        "streak": 0
-      }
-    },
-    {
-      "features": [
-        "kw_inflation",
-        "kw_tariffs",
-        "open_thank_you_for_your_attention"
-      ],
-      "direction": "LONG",
-      "hold": 3,
-      "id": "ced990385852",
-      "n_cond": 3,
-      "train_trades": 6,
-      "train_win_rate": 83.3,
-      "train_avg": 1.612,
-      "test_trades": 3,
-      "test_win_rate": 100.0,
-      "test_avg": 0.35,
-      "combined_score": 91.7,
-      "origin": "crossover",
-      "born_date": "2026-06-18",
-      "weight": 1.0,
-      "parents": [
-        "kw_tariffs+open_thank_you_for_your_attention",
-        "kw_inflation+kw_tariffs"
       ],
       "learn_stats": {
         "correct": 0,
