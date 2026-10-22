@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-10-21T18:26:39Z",
-    "evolved_rules_added": 48
+    "last_evolution": "2026-10-22T18:21:21Z",
+    "evolved_rules_added": 46
   },
   "rules": [
     {
@@ -13165,7 +13165,12 @@
       "parents": [
         "kw_maga+open_trade",
         "kw_beautiful+open_tariffs"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
