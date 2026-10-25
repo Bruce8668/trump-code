@@ -1,8 +1,8 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-10-24T17:15:17Z",
-    "evolved_rules_added": 46
+    "last_evolution": "2026-10-25T17:27:19Z",
+    "evolved_rules_added": 48
   },
   "rules": [
     {
@@ -13430,7 +13430,12 @@
       "parents": [
         "kw_agreement+kw_jobs",
         "kw_biden+open_ban"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
