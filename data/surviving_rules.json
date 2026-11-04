@@ -1,7 +1,7 @@
 {
   "meta": {
     "total_surviving": 600,
-    "last_evolution": "2026-11-03T20:27:21Z",
+    "last_evolution": "2026-11-04T20:41:31Z",
     "evolved_rules_added": 43
   },
   "rules": [
@@ -13255,7 +13255,12 @@
       "parents": [
         "avg_len_long+kw_energy_2plus",
         "kw_india+kw_never_let_you_down"
-      ]
+      ],
+      "learn_stats": {
+        "correct": 0,
+        "wrong": 0,
+        "streak": 0
+      }
     },
     {
       "features": [
